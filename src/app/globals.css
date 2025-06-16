@@ -1,0 +1,155 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+/* CSS Variables */
+:root {
+  --color-blueprint-50: #f0f7ff;
+  --color-blueprint-100: #e0efff;
+  --color-blueprint-200: #bae1ff;
+  --color-blueprint-300: #7dc8ff;
+  --color-blueprint-400: #38abff;
+  --color-blueprint-500: #0e8fff;
+  --color-blueprint-600: #0070f3;
+  --color-blueprint-700: #0061d4;
+  --color-blueprint-800: #0052b3;
+  --color-blueprint-900: #004494;
+  --color-blueprint-950: #002a5c;
+  
+  --electric-blue: #00d4ff;
+  --electric-cyan: #00ffff;
+  --electric-green: #00ff88;
+  --electric-yellow: #ffff00;
+  --electric-orange: #ff8800;
+  --electric-red: #ff0066;
+  
+  --grid-size: 20px;
+  --blueprint-opacity: 0.1;
+}
+
+.dark {
+  --blueprint-opacity: 0.2;
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  color: theme('colors.slate.200');
+  background: theme('colors.slate.950');
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: theme('colors.slate.900');
+}
+
+::-webkit-scrollbar-thumb {
+  background: theme('colors.blueprint.600');
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.blueprint.500');
+}
+
+/* Blueprint Background */
+.blueprint-bg {
+  position: relative;
+  background-color: theme('colors.slate.950');
+  background-image: 
+    linear-gradient(rgba(59, 130, 246, var(--blueprint-opacity)) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, var(--blueprint-opacity)) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: 0 0, 0 0;
+}
+
+.blueprint-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Blueprint Dots */
+.blueprint-dots {
+  background-image: radial-gradient(circle, rgba(59, 130, 246, 0.3) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Electric Effects */
+.electric-border {
+  position: relative;
+  border: 1px solid transparent;
+  background: linear-gradient(theme('colors.slate.900'), theme('colors.slate.900')) padding-box,
+              linear-gradient(45deg, var(--electric-blue), var(--electric-cyan)) border-box;
+}
+
+.electric-glow {
+  box-shadow: 
+    0 0 5px var(--electric-blue),
+    0 0 10px var(--electric-blue),
+    0 0 15px var(--electric-blue);
+}
+
+.electric-text {
+  background: linear-gradient(45deg, var(--electric-blue), var(--electric-cyan), var(--electric-green));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: electric-flow 3s ease-in-out infinite;
+}
+
+@keyframes electric-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Circuit Lines */
+.circuit-line {
+  stroke: var(--electric-blue);
+  stroke-width: 2;
+  stroke-dasharray: 10 5;
+  stroke-dashoffset: 0;
+  animation: circuit-flow 3s linear infinite;
+}
+
+@keyframes circuit-flow {
+  to {
+    stroke-dashoffset: -15;
+  }
+}
+
+/* Glass Morphism */
+.glass {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12
