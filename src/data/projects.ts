@@ -1,39 +1,15 @@
-export interface Project {
-  id: string;
-  title: string;
-  category:
-    | "frontend"
-    | "embedded"
-    | "blockchain"
-    | "robotics"
-    | "ml"
-    | "fullstack";
-  description: string;
-  longDescription: string;
-  technologies: string[];
-  features: string[];
-  challenges: string[];
-  solutions: string[];
-  images: string[];
-  githubUrl?: string;
-  liveUrl?: string;
-  demoVideo?: string;
-  metrics?: {
-    [key: string]: string;
-  };
-  timeline: string;
-  teamSize?: number;
-  myRole: string;
-  featured: boolean;
-  status: "completed" | "in-progress" | "concept";
-  year: number;
-  testimonial?: {
-    text: string;
-    author: string;
-    role: string;
-    company: string;
-  };
-}
+import { Project } from "@/types";
+
+import { FiMonitor, FiCpu, FiLink, FiSettings, FiLayers } from "react-icons/fi";
+import {
+  SiReact,
+  SiArduino,
+  SiBlockchaindotcom,
+  SiRobotframework,
+  SiTensorflow,
+  SiNextdotjs,
+} from "react-icons/si";
+import { PiBrainFill } from "react-icons/pi";
 
 export const projects: Project[] = [
   {
@@ -495,21 +471,69 @@ export const projects: Project[] = [
     year: 2024,
   },
 ];
+
 export const getProjectsByCategory = (category: Project["category"]) =>
   projects.filter((project) => project.category === category);
+
 export const getFeaturedProjects = () =>
   projects.filter((project) => project.featured);
+
 export const getProjectById = (id: string) =>
   projects.find((project) => project.id === id);
+
 export const getRecentProjects = (count: number = 4) =>
   projects.sort((a, b) => b.year - a.year).slice(0, count);
+
 export const getProjectsByStatus = (status: Project["status"]) =>
   projects.filter((project) => project.status === status);
+
 export const projectCategories = [
-  { id: "frontend", name: "Frontend", icon: "🎨", color: "#3B82F6" },
-  { id: "embedded", name: "Embedded", icon: "🔧", color: "#F59E0B" },
-  { id: "blockchain", name: "Blockchain", icon: "⛓️", color: "#10B981" },
-  { id: "robotics", name: "Robotics", icon: "🤖", color: "#8B5CF6" },
-  { id: "ml", name: "Machine Learning", icon: "🧠", color: "#EF4444" },
-  { id: "fullstack", name: "Full Stack", icon: "🚀", color: "#6366F1" },
+  {
+    id: "frontend",
+    name: "Frontend",
+    icon: SiReact,
+    iconAlt: FiMonitor,
+    color: "#3B82F6",
+    description: "Modern web applications with cutting-edge UI/UX",
+  },
+  {
+    id: "embedded",
+    name: "Embedded",
+    icon: SiArduino,
+    iconAlt: FiCpu,
+    color: "#F59E0B",
+    description: "Hardware-software integration and IoT solutions",
+  },
+  {
+    id: "blockchain",
+    name: "Blockchain",
+    icon: SiBlockchaindotcom,
+    iconAlt: FiLink,
+    color: "#10B981",
+    description: "Decentralized applications and smart contracts",
+  },
+  {
+    id: "robotics",
+    name: "Robotics",
+    icon: SiRobotframework,
+    iconAlt: FiSettings,
+    color: "#8B5CF6",
+    description: "Autonomous systems and intelligent automation",
+  },
+  {
+    id: "ml",
+    name: "Machine Learning",
+    icon: SiTensorflow,
+    iconAlt: PiBrainFill,
+    color: "#EF4444",
+    description: "AI-powered solutions and data analytics",
+  },
+  {
+    id: "fullstack",
+    name: "Full Stack",
+    icon: SiNextdotjs,
+    iconAlt: FiLayers,
+    color: "#6366F1",
+    description: "End-to-end web application development",
+  },
 ] as const;
