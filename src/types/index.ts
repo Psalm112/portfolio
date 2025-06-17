@@ -5,17 +5,17 @@ export interface Project {
   longDescription: string;
   category:
     | "frontend"
-    | "embedded/iot"
+    | "embedded"
     | "blockchain"
     | "robotics"
+    | "ml"
     | "fullstack";
-  tags: string[];
   technologies: string[];
   features: string[];
-  image: string;
+  image?: string;
   images: string[];
-  demoUrl?: string;
-  codeUrl?: string;
+  githubUrl?: string;
+  liveUrl?: string;
   demoVideo?: string;
   featured: boolean;
   year: number;
@@ -25,7 +25,9 @@ export interface Project {
   status: "completed" | "in-progress" | "concept";
   challenges: string[];
   solutions: string[];
-  results: string[];
+  metrics?: {
+    [key: string]: string;
+  };
   testimonial?: {
     text: string;
     author: string;
@@ -84,6 +86,20 @@ export interface Certification {
   credentialId?: string;
   credentialUrl?: string;
   image: string;
+}
+
+export interface Testimonial {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  image: string;
+  testimonial: string;
+  rating: number;
+  date: string;
+  projectId?: string;
+  linkedin?: string;
+  verified: boolean;
 }
 
 export interface ContactForm {
@@ -161,4 +177,47 @@ export interface PerformanceMetrics {
   ttfb: number; // Time to First Byte
   fps: number; // Frames per second
   memory: number; // Memory usage
+}
+
+export interface BlueprintTheme {
+  colors: {
+    primary: string;
+    secondary: string;
+    accent: string;
+    background: string;
+    paper: string;
+    grid: string;
+    text: string;
+  };
+  spacing: {
+    unit: number;
+    grid: number;
+  };
+  typography: {
+    heading: string;
+    body: string;
+    mono: string;
+  };
+}
+
+export interface NavigationItem {
+  id: string;
+  label: string;
+  href: string;
+  icon?: string;
+  external?: boolean;
+}
+
+export interface SkillCategory {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+}
+
+export interface ProjectCategory {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
 }

@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
@@ -17,12 +17,12 @@ interface UseScrollTriggerOptions {
   onLeaveBack?: () => void;
   scrub?: boolean | number;
   pin?: boolean;
-  snap?: boolean | number | number[];
+  snap?: number | number[] | "labels" | "labelsDirectional";
 }
 
 export const useScrollTrigger = (
   animation: gsap.TweenVars,
-  options: UseScrollTriggerOptions = {}
+  options: UseScrollTriggerOptions = {},
 ) => {
   const elementRef = useRef<HTMLElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
@@ -33,16 +33,16 @@ export const useScrollTrigger = (
     const element = elementRef.current;
     const {
       trigger = element,
-      start = 'top 80%',
-      end = 'bottom 20%',
-      toggleActions = 'play none none reverse',
+      start = "top 80%",
+      end = "bottom 20%",
+      toggleActions = "play none none reverse",
       onEnter,
       onLeave,
       onEnterBack,
       onLeaveBack,
       scrub = false,
       pin = false,
-      snap = false,
+      snap = undefined,
     } = options;
 
     scrollTriggerRef.current = ScrollTrigger.create({

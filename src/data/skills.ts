@@ -1,0 +1,323 @@
+import { Skill } from "@/types";
+
+export const skills: Skill[] = [
+  // Frontend Skills
+  {
+    id: "react",
+    name: "React",
+    category: "frontend",
+    level: 95,
+    icon: "⚛️",
+    description:
+      "Advanced React development with hooks, context, and performance optimization",
+    experience: "4+ years",
+    projects: ["blockchain-iot-framework", "warehouse-management-gnn"],
+  },
+  {
+    id: "nextjs",
+    name: "Next.js",
+    category: "frontend",
+    level: 92,
+    icon: "▲",
+    description: "Full-stack React framework with SSR, SSG, and API routes",
+    experience: "3+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+  {
+    id: "typescript",
+    name: "TypeScript",
+    category: "frontend",
+    level: 88,
+    icon: "📘",
+    description:
+      "Type-safe JavaScript development for large-scale applications",
+    experience: "3+ years",
+    projects: ["blockchain-iot-framework", "warehouse-management-gnn"],
+  },
+  {
+    id: "tailwindcss",
+    name: "Tailwind CSS",
+    category: "frontend",
+    level: 90,
+    icon: "🎨",
+    description: "Utility-first CSS framework for rapid UI development",
+    experience: "2+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+  {
+    id: "gsap",
+    name: "GSAP",
+    category: "frontend",
+    level: 85,
+    icon: "🎬",
+    description:
+      "Professional-grade animation library for complex interactions",
+    experience: "2+ years",
+    projects: ["warehouse-management-gnn"],
+  },
+  {
+    id: "threejs",
+    name: "Three.js",
+    category: "frontend",
+    level: 82,
+    icon: "🎲",
+    description: "3D graphics library for immersive web experiences",
+    experience: "2+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+  {
+    id: "framer-motion",
+    name: "Framer Motion",
+    category: "frontend",
+    level: 87,
+    icon: "🎪",
+    description: "React animation library for smooth, declarative animations",
+    experience: "2+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+
+  // Backend Skills
+  {
+    id: "nodejs",
+    name: "Node.js",
+    category: "backend",
+    level: 88,
+    icon: "🟢",
+    description: "Server-side JavaScript runtime for scalable applications",
+    experience: "3+ years",
+    projects: ["blockchain-iot-framework", "warehouse-management-gnn"],
+  },
+  {
+    id: "python",
+    name: "Python",
+    category: "backend",
+    level: 85,
+    icon: "🐍",
+    description:
+      "Versatile programming language for ML, automation, and web development",
+    experience: "4+ years",
+    projects: ["warehouse-management-gnn", "coffee-delivery-robot"],
+  },
+  {
+    id: "golang",
+    name: "Go",
+    category: "backend",
+    level: 78,
+    icon: "🐹",
+    description: "High-performance language for concurrent systems and APIs",
+    experience: "1+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+  {
+    id: "blockchain",
+    name: "Blockchain",
+    category: "backend",
+    level: 80,
+    icon: "⛓️",
+    description: "Distributed ledger technology and smart contract development",
+    experience: "2+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+  {
+    id: "solidity",
+    name: "Solidity",
+    category: "backend",
+    level: 75,
+    icon: "💎",
+    description: "Smart contract programming language for Ethereum",
+    experience: "2+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+
+  // Embedded Systems Skills
+  {
+    id: "c-cpp",
+    name: "C/C++",
+    category: "embedded",
+    level: 90,
+    icon: "⚙️",
+    description:
+      "Low-level programming for embedded systems and performance-critical applications",
+    experience: "5+ years",
+    projects: [
+      "coffee-delivery-robot",
+      "smart-home-security",
+      "warehouse-management-gnn",
+    ],
+  },
+  {
+    id: "arduino",
+    name: "Arduino",
+    category: "embedded",
+    level: 95,
+    icon: "🔧",
+    description:
+      "Microcontroller platform for rapid prototyping and IoT development",
+    experience: "4+ years",
+    projects: [
+      "coffee-delivery-robot",
+      "smart-home-security",
+      "warehouse-management-gnn",
+    ],
+  },
+  {
+    id: "raspberry-pi",
+    name: "Raspberry Pi",
+    category: "embedded",
+    level: 88,
+    icon: "🥧",
+    description: "Single-board computer for advanced embedded applications",
+    experience: "3+ years",
+    projects: ["coffee-delivery-robot", "blockchain-iot-framework"],
+  },
+  {
+    id: "esp32",
+    name: "ESP32",
+    category: "embedded",
+    level: 92,
+    icon: "📡",
+    description:
+      "WiFi and Bluetooth enabled microcontroller for IoT applications",
+    experience: "3+ years",
+    projects: ["smart-home-security", "blockchain-iot-framework"],
+  },
+  {
+    id: "iot-protocols",
+    name: "IoT Protocols",
+    category: "embedded",
+    level: 85,
+    icon: "🌐",
+    description: "MQTT, CoAP, HTTP communication protocols for IoT devices",
+    experience: "3+ years",
+    projects: ["blockchain-iot-framework", "smart-home-security"],
+  },
+  {
+    id: "opencv",
+    name: "OpenCV",
+    category: "embedded",
+    level: 80,
+    icon: "👁️",
+    description: "Computer vision library for image processing and recognition",
+    experience: "2+ years",
+    projects: ["coffee-delivery-robot"],
+  },
+  {
+    id: "tensorflow",
+    name: "TensorFlow",
+    category: "embedded",
+    level: 75,
+    icon: "🧠",
+    description: "Machine learning framework for AI applications",
+    experience: "2+ years",
+    projects: ["warehouse-management-gnn"],
+  },
+
+  // Tools & DevOps
+  {
+    id: "git",
+    name: "Git",
+    category: "tools",
+    level: 90,
+    icon: "🌳",
+    description: "Version control system for collaborative development",
+    experience: "4+ years",
+    projects: [
+      "blockchain-iot-framework",
+      "warehouse-management-gnn",
+      "coffee-delivery-robot",
+    ],
+  },
+  {
+    id: "docker",
+    name: "Docker",
+    category: "tools",
+    level: 82,
+    icon: "🐳",
+    description: "Containerization platform for consistent deployment",
+    experience: "2+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+  {
+    id: "aws",
+    name: "AWS",
+    category: "tools",
+    level: 78,
+    icon: "☁️",
+    description: "Cloud computing platform for scalable infrastructure",
+    experience: "2+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+  {
+    id: "figma",
+    name: "Figma",
+    category: "tools",
+    level: 85,
+    icon: "🎨",
+    description: "Collaborative design tool for UI/UX development",
+    experience: "3+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+
+  // Soft Skills
+  {
+    id: "problem-solving",
+    name: "Problem Solving",
+    category: "soft-skills",
+    level: 95,
+    icon: "🧩",
+    description: "Analytical thinking and creative solution development",
+    experience: "5+ years",
+    projects: [
+      "blockchain-iot-framework",
+      "warehouse-management-gnn",
+      "coffee-delivery-robot",
+    ],
+  },
+  {
+    id: "team-leadership",
+    name: "Team Leadership",
+    category: "soft-skills",
+    level: 88,
+    icon: "👥",
+    description: "Leading development teams and mentoring junior developers",
+    experience: "2+ years",
+    projects: ["blockchain-iot-framework"],
+  },
+  {
+    id: "communication",
+    name: "Communication",
+    category: "soft-skills",
+    level: 90,
+    icon: "💬",
+    description: "Clear technical communication and client interaction",
+    experience: "4+ years",
+    projects: ["blockchain-iot-framework", "warehouse-management-gnn"],
+  },
+  {
+    id: "project-management",
+    name: "Project Management",
+    category: "soft-skills",
+    level: 85,
+    icon: "📋",
+    description: "Agile methodologies and project delivery",
+    experience: "3+ years",
+    projects: ["blockchain-iot-framework", "warehouse-management-gnn"],
+  },
+];
+
+export const getSkillsByCategory = (category: Skill["category"]) =>
+  skills.filter((skill) => skill.category === category);
+
+export const getFeaturedSkills = () =>
+  skills.filter((skill) => skill.level >= 85);
+
+export const getSkillById = (id: string) =>
+  skills.find((skill) => skill.id === id);
+
+export const skillCategories = [
+  { id: "frontend", name: "Frontend", icon: "🎨", color: "#3B82F6" },
+  { id: "backend", name: "Backend", icon: "⚙️", color: "#10B981" },
+  { id: "embedded", name: "Embedded", icon: "🔧", color: "#F59E0B" },
+  { id: "tools", name: "Tools", icon: "🛠️", color: "#8B5CF6" },
+  { id: "soft-skills", name: "Soft Skills", icon: "🧠", color: "#EF4444" },
+] as const;
