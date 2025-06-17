@@ -3,17 +3,26 @@ export interface Project {
   title: string;
   description: string;
   longDescription: string;
-  category: 'frontend' | 'embedded' | 'iot' | 'fullstack';
+  category:
+    | "frontend"
+    | "embedded/iot"
+    | "blockchain"
+    | "robotics"
+    | "fullstack";
   tags: string[];
   technologies: string[];
+  features: string[];
   image: string;
   images: string[];
   demoUrl?: string;
   codeUrl?: string;
+  demoVideo?: string;
   featured: boolean;
-  completed: boolean;
   year: number;
-  duration: string;
+  timeline: string;
+  teamSize?: number;
+  myRole: string;
+  status: "completed" | "in-progress" | "concept";
   challenges: string[];
   solutions: string[];
   results: string[];
@@ -27,23 +36,25 @@ export interface Project {
 
 export interface Experience {
   id: string;
-  title: string;
+  position: string;
   company: string;
   location: string;
-  type: 'full-time' | 'contract' | 'freelance' | 'startup';
+  type: "full-time" | "part-time" | "freelance" | "contract";
   startDate: string;
   endDate?: string;
   current: boolean;
   description: string;
+  responsibilities: string[];
   achievements: string[];
   technologies: string[];
   projects: string[];
+  skills: string[];
 }
 
 export interface Skill {
   id: string;
   name: string;
-  category: 'frontend' | 'backend' | 'embedded' | 'tools' | 'soft-skills';
+  category: "frontend" | "backend" | "embedded" | "tools" | "soft-skills";
   level: number; // 1-100
   icon: string;
   description: string;
@@ -83,7 +94,7 @@ export interface ContactForm {
   message: string;
   budget?: string;
   timeline?: string;
-  projectType: 'frontend' | 'embedded' | 'iot' | 'fullstack' | 'consulting';
+  projectType: "frontend" | "embedded" | "iot" | "fullstack" | "consulting";
 }
 
 export interface SocialLink {
@@ -99,7 +110,7 @@ export interface SEOData {
   description: string;
   keywords: string[];
   ogImage: string;
-  twitterCard: 'summary' | 'summary_large_image';
+  twitterCard: "summary" | "summary_large_image";
   canonicalUrl?: string;
   structuredData?: Record<string, any>;
 }
@@ -138,7 +149,7 @@ export interface ThreeScene {
     pixelRatio: number;
     antialias: boolean;
     alpha: boolean;
-    powerPreference: 'high-performance' | 'low-power' | 'default';
+    powerPreference: "high-performance" | "low-power" | "default";
   };
 }
 
