@@ -1,10 +1,15 @@
 export { Button } from "./Button/Button";
 export type { ButtonProps } from "./Button/Button";
-// Export other UI components when created
-// export { Card } from './Card/Card';
+
+export { Card } from "./Card/Card";
+export type { CardProps } from "./Card/Card";
+
+export { Badge } from "./Badge/Badge";
+export type { BadgeProps } from "./Badge/Badge";
+
+export { Input } from "./Input/Input";
+export type { InputProps } from "./Input/Input";
+
 // export { Modal } from './Modal/Modal';
-// export { Input } from './Input/Input';
 // export { Select } from './Select/Select';
-// export { Badge } from './Badge/Badge';
-// export { Avatar } from './Avatar/Avatar';
 // export { Tooltip } from './Tooltip/Tooltip';
