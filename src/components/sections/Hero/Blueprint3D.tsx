@@ -48,54 +48,60 @@ export const Blueprint3D = () => {
         stagger: 0.1,
       });
 
-      // Electric flow animation
-      const electricFlow = () => {
-        paths.forEach((path) => {
-          const length = (path as SVGPathElement).getTotalLength();
-          const dot = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "circle",
-          );
-          dot.setAttribute("r", "3");
-          dot.setAttribute("fill", "#00d4ff");
-          dot.setAttribute("filter", "blur(1px)");
-          circuitRef.current?.appendChild(dot);
-
-          gsap.fromTo(
-            dot,
-            {
-              motionPath: {
-                path: path,
-                start: 0,
-                end: 1,
-              },
-              opacity: 1,
-              scale: 1,
-            },
-            {
-              motionPath: {
-                path: path,
-                start: 0,
-                end: 1,
-              },
-              opacity: 0,
-              scale: 0.3,
-              duration: 3,
-              ease: "none",
-              onComplete: () => dot.remove(),
-            },
-          );
-        });
-      };
-
-      const flowInterval = setInterval(electricFlow, 1000);
-
-      return () => {
-        clearInterval(flowInterval);
-      };
+      return tl;
     },
     { scope: containerRef },
   );
+
+  useEffect(() => {
+    if (!circuitRef.current) return;
+
+    // Electric flow animation
+    const electricFlow = () => {
+      const paths = circuitRef.current?.querySelectorAll("path");
+      if (!paths) return;
+
+      paths.forEach((path) => {
+        const length = (path as SVGPathElement).getTotalLength();
+        const dot = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "circle",
+        );
+        dot.setAttribute("r", "3");
+        dot.setAttribute("fill", "#00d4ff");
+        dot.setAttribute("filter", "blur(1px)");
+        circuitRef.current?.appendChild(dot);
+
+        gsap.fromTo(
+          dot,
+          {
+            motionPath: {
+              path: path,
+              start: 0,
+              end: 1,
+            },
+            opacity: 1,
+            scale: 1,
+          },
+          {
+            motionPath: {
+              path: path,
+              start: 0,
+              end: 1,
+            },
+            opacity: 0,
+            scale: 0.3,
+            duration: 3,
+            ease: "none",
+            onComplete: () => dot.remove(),
+          },
+        );
+      });
+    };
+
+    const flowInterval = setInterval(electricFlow, 1000);
+    return () => clearInterval(flowInterval);
+  }, []);
 
   return (
     <div
