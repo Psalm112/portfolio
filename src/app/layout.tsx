@@ -1,8 +1,8 @@
 import { Inter, JetBrains_Mono, Orbitron } from "next/font/google";
 import { Metadata } from "next";
-import { ThemeProvider } from "@/context/ThemeContext";
-import { AnimationProvider } from "@/context/AnimationContext";
-import { PerformanceProvider } from "@/context/PerformanceContext";
+// import { ThemeProvider } from "@/context/ThemeContext";
+// import { AnimationProvider } from "@/context/AnimationContext";
+// import { PerformanceProvider } from "@/context/PerformanceContext";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary/ErrorBoundary";
 import { SEOHead } from "@/components/common/SEO/SEOHead";
 import { StructuredData } from "@/components/common/SEO/StructuredData";
@@ -106,17 +106,17 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-slate-950 text-white overflow-x-hidden">
         <ErrorBoundary>
-          <ThemeProvider>
+          {/* <ThemeProvider>
             <PerformanceProvider>
-              <AnimationProvider>
-                <div className="relative min-h-screen bg-blueprint-grid bg-[length:100px_100px]">
-                  {children}
-                </div>
-                <PerformanceMonitor />
-                <GoogleAnalytics />
-              </AnimationProvider>
+              <AnimationProvider> */}
+          <div className="relative min-h-screen bg-blueprint-grid bg-[length:100px_100px]">
+            {children}
+          </div>
+          <PerformanceMonitor />
+          <GoogleAnalytics />
+          {/* </AnimationProvider>
             </PerformanceProvider>
-          </ThemeProvider>
+          </ThemeProvider> */}
         </ErrorBoundary>
         <StructuredData />
       </body>

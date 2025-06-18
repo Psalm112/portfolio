@@ -8,20 +8,19 @@ import { ScrollTriggerAnimations } from "@/components/animations/ScrollTriggerAn
 import { MouseFollower } from "@/components/animations/MouseFollower";
 import { PageTransitions } from "@/components/animations/PageTransitions";
 
-// Dynamic imports for better performance
-const About = dynamic(() => import("@/components/sections/About/About"), {
-  loading: () => (
-    <div className="h-screen flex items-center justify-center">Loading...</div>
-  ),
-});
-const Experience = dynamic(
-  () => import("@/components/sections/Experience/Experience"),
-);
-const Skills = dynamic(() => import("@/components/sections/Skills/Skills"));
-const Projects = dynamic(
-  () => import("@/components/sections/Projects/Projects"),
-);
-const Contact = dynamic(() => import("@/components/sections/Contact/Contact"));
+// const About = dynamic(() => import("@/components/sections/About/About"), {
+//   loading: () => (
+//     <div className="h-screen flex items-center justify-center">Loading...</div>
+//   ),
+// });
+// const Experience = dynamic(
+//   () => import("@/components/sections/Experience/Experience"),
+// );
+// const Skills = dynamic(() => import("@/components/sections/Skills/Skills"));
+// const Projects = dynamic(
+//   () => import("@/components/sections/Projects/Projects"),
+// );
+// const Contact = dynamic(() => import("@/components/sections/Contact/Contact"));
 
 export default function HomePage() {
   return (
@@ -36,7 +35,7 @@ export default function HomePage() {
           <Hero />
         </section>
 
-        <Suspense fallback={<div className="h-screen" />}>
+        {/* <Suspense fallback={<div className="h-screen" />}>
           <section id="about" className="relative">
             <About />
           </section>
@@ -56,7 +55,7 @@ export default function HomePage() {
           <section id="contact" className="relative">
             <Contact />
           </section>
-        </Suspense>
+        </Suspense> */}
       </main>
     </PageTransitions>
   );

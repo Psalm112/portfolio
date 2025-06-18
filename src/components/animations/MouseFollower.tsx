@@ -55,6 +55,9 @@ export const MouseFollower = () => {
     // Mouse enter/leave handlers for interactive elements
     const handleMouseEnter = (e: Event) => {
       const target = e.target as HTMLElement;
+
+      if (!target || !target.tagName) return;
+
       const tagName = target.tagName.toLowerCase();
 
       if (tagName === "a" || tagName === "button" || target.onclick) {
