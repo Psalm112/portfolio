@@ -5,7 +5,12 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin, DrawSVGPlugin, MotionPathPlugin);
+  gsap.registerPlugin(
+    ScrollTrigger,
+    MorphSVGPlugin,
+    DrawSVGPlugin,
+    MotionPathPlugin,
+  );
 }
 
 export interface AnimationConfig {
@@ -44,14 +49,17 @@ export class AnimationController {
   }
 
   // Create a master timeline for section animations
-  createMasterTimeline(id: string, config: AnimationConfig = {}): gsap.core.Timeline {
+  createMasterTimeline(
+    id: string,
+    config: AnimationConfig = {},
+  ): gsap.core.Timeline {
     const tl = gsap.timeline({
       ...config,
       onComplete: () => {
         console.log(`Animation timeline ${id} completed`);
       },
     });
-    
+
     this.timelines.set(id, tl);
     return tl;
   }
@@ -64,7 +72,7 @@ export class AnimationController {
   // Blueprint paper reveal animation
   blueprintReveal(
     element: string | Element,
-    config: ScrollAnimationConfig = {}
+    config: ScrollAnimationConfig = {},
   ): ScrollTrigger {
     const {
       duration = 2,
@@ -79,24 +87,24 @@ export class AnimationController {
       start,
       end,
       toggleActions,
-      animation: gsap.timeline()
-        .fromTo(element, 
-          { 
-            opacity: 0,
-            scale: 0.8,
-            filter: "blur(10px)",
-            "--blueprint-opacity": 0,
-          },
-          { 
-            opacity: 1,
-            scale: 1,
-            filter: "blur(0px)",
-            "--blueprint-opacity": 0.2,
-            duration,
-            ease: "power2.out",
-            ...restConfig,
-          }
-        ),
+      animation: gsap.timeline().fromTo(
+        element,
+        {
+          opacity: 0,
+          scale: 0.8,
+          filter: "blur(10px)",
+          "--blueprint-opacity": 0,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          filter: "blur(0px)",
+          "--blueprint-opacity": 0.2,
+          duration,
+          ease: "power2.out",
+          ...restConfig,
+        },
+      ),
       ...restConfig,
     });
 
@@ -106,21 +114,22 @@ export class AnimationController {
   // Circuit line drawing animation
   circuitDraw(
     paths: string | string[],
-    config: AnimationConfig = {}
+    config: AnimationConfig = {},
   ): gsap.core.Timeline {
-    const pathElements = typeof paths === 'string' ? [paths] : paths;
+    const pathElements = typeof paths === "string" ? [paths] : paths;
     const tl = gsap.timeline(config);
 
     pathElements.forEach((path, index) => {
-      tl.fromTo(path,
+      tl.fromTo(
+        path,
         { drawSVG: "0%" },
-        { 
+        {
           drawSVG: "100%",
           duration: config.duration || 2,
           ease: config.ease || "power2.inOut",
           stagger: config.stagger || 0.2,
         },
-        index * (config.stagger || 0.2)
+        index * (config.stagger || 0.2),
       );
     });
 
@@ -129,14 +138,18 @@ export class AnimationController {
 
   // Mechanical assembly animation
   mechanicalAssembly(
-    components: { element: string | Element; fromPosition: { x: number; y: number; z?: number } }[],
-    config: AnimationConfig = {}
+    components: {
+      element: string | Element;
+      fromPosition: { x: number; y: number; z?: number };
+    }[],
+    config: AnimationConfig = {},
   ): gsap.core.Timeline {
     const tl = gsap.timeline(config);
 
     components.forEach(({ element, fromPosition }, index) => {
-      tl.fromTo(element,
-        { 
+      tl.fromTo(
+        element,
+        {
           x: fromPosition.x,
           y: fromPosition.y,
           z: fromPosition.z || 0,
@@ -144,7 +157,7 @@ export class AnimationController {
           scale: 0.5,
           rotation: 180,
         },
-        { 
+        {
           x: 0,
           y: 0,
           z: 0,
@@ -154,7 +167,7 @@ export class AnimationController {
           duration: config.duration || 1.5,
           ease: config.ease || "back.out(1.7)",
         },
-        index * (config.stagger || 0.3)
+        index * (config.stagger || 0.3),
       );
     });
 
@@ -164,14 +177,14 @@ export class AnimationController {
   // Microcontroller signal flow animation
   signalFlow(
     signals: { from: string | Element; to: string | Element; color?: string }[],
-    config: AnimationConfig = {}
+    config: AnimationConfig = {},
   ): gsap.core.Timeline {
     const tl = gsap.timeline({ repeat: -1, ...config });
 
     signals.forEach(({ from, to, color = "#00d4ff" }, index) => {
       // Create signal particle
-      const signal = document.createElement('div');
-      signal.className = 'signal-particle';
+      const signal = document.createElement("div");
+      signal.className = "signal-particle";
       signal.style.cssText = `
         position: absolute;
         width: 4px;
@@ -182,36 +195,39 @@ export class AnimationController {
         z-index: 1000;
         pointer-events: none;
       `;
-      
+
       document.body.appendChild(signal);
 
-      tl.set(signal, { 
+      tl.set(signal, {
         x: (from as HTMLElement).offsetLeft,
         y: (from as HTMLElement).offsetTop,
         opacity: 1,
-      })
-      .to(signal, {
-        motionPath: {
-          path: `M${(from as HTMLElement).offsetLeft},${(from as HTMLElement).offsetTop} L${(to as HTMLElement).offsetLeft},${(to as HTMLElement).offsetTop}`,
-          autoRotate: true,
+      }).to(
+        signal,
+        {
+          motionPath: {
+            path: `M${(from as HTMLElement).offsetLeft},${(from as HTMLElement).offsetTop} L${(to as HTMLElement).offsetLeft},${(to as HTMLElement).offsetTop}`,
+            autoRotate: true,
+          },
+          duration: config.duration || 1,
+          ease: config.ease || "power2.inOut",
+          onComplete: () => {
+            // Flash destination
+            gsap.to(to, {
+              boxShadow: `0 0 20px ${color}`,
+              duration: 0.2,
+              yoyo: true,
+              repeat: 1,
+            });
+
+            // Remove signal particle
+            setTimeout(() => {
+              document.body.removeChild(signal);
+            }, 100);
+          },
         },
-        duration: config.duration || 1,
-        ease: config.ease || "power2.inOut",
-        onComplete: () => {
-          // Flash destination
-          gsap.to(to, {
-            boxShadow: `0 0 20px ${color}`,
-            duration: 0.2,
-            yoyo: true,
-            repeat: 1,
-          });
-          
-          // Remove signal particle
-          setTimeout(() => {
-            document.body.removeChild(signal);
-          }, 100);
-        },
-      }, index * (config.stagger || 0.5));
+        index * (config.stagger || 0.5),
+      );
     });
 
     return tl;
@@ -221,7 +237,7 @@ export class AnimationController {
   robotArmMovement(
     arm: string | Element,
     waypoints: { x: number; y: number; rotation?: number }[],
-    config: AnimationConfig = {}
+    config: AnimationConfig = {},
   ): gsap.core.Timeline {
     const tl = gsap.timeline(config);
 
@@ -240,27 +256,32 @@ export class AnimationController {
 
   // Data visualization animation
   dataVisualization(
-    dataPoints: { element: string | Element; value: number; maxValue: number }[],
-    config: AnimationConfig = {}
+    dataPoints: {
+      element: string | Element;
+      value: number;
+      maxValue: number;
+    }[],
+    config: AnimationConfig = {},
   ): gsap.core.Timeline {
     const tl = gsap.timeline(config);
 
     dataPoints.forEach(({ element, value, maxValue }, index) => {
       const percentage = (value / maxValue) * 100;
-      
-      tl.fromTo(element,
-        { 
+
+      tl.fromTo(
+        element,
+        {
           scaleY: 0,
           opacity: 0,
         },
-        { 
+        {
           scaleY: percentage / 100,
           opacity: 1,
           duration: config.duration || 1,
           ease: config.ease || "power2.out",
           transformOrigin: "bottom",
         },
-        index * (config.stagger || 0.1)
+        index * (config.stagger || 0.1),
       );
     });
 
@@ -269,21 +290,24 @@ export class AnimationController {
 
   // Holographic interface animation
   holographicInterface(
-    interface: string | Element,
-    config: AnimationConfig = {}
+    interfaceElement: string | Element,
+    config: AnimationConfig = {},
   ): gsap.core.Timeline {
     const tl = gsap.timeline({ repeat: -1, ...config });
 
-    tl.to(interface, {
+    tl.to(interfaceElement, {
       backgroundPosition: "200% 0%",
       duration: config.duration || 3,
       ease: "none",
-    })
-    .to(interface, {
-      filter: "hue-rotate(360deg)",
-      duration: config.duration || 4,
-      ease: "none",
-    }, 0);
+    }).to(
+      interfaceElement,
+      {
+        filter: "hue-rotate(360deg)",
+        duration: config.duration || 4,
+        ease: "none",
+      },
+      0,
+    );
 
     return tl;
   }
@@ -292,15 +316,15 @@ export class AnimationController {
   particleSystem(
     container: string | Element,
     particleCount: number = 50,
-    config: AnimationConfig = {}
+    config: AnimationConfig = {},
   ): gsap.core.Timeline {
     const tl = gsap.timeline({ repeat: -1, ...config });
     const particles: HTMLElement[] = [];
 
     // Create particles
     for (let i = 0; i < particleCount; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
+      const particle = document.createElement("div");
+      particle.className = "particle";
       particle.style.cssText = `
         position: absolute;
         width: 2px;
@@ -309,7 +333,7 @@ export class AnimationController {
         border-radius: 50%;
         opacity: 0;
       `;
-      
+
       (container as HTMLElement).appendChild(particle);
       particles.push(particle);
 
@@ -321,14 +345,15 @@ export class AnimationController {
       const endX = startX + (Math.random() - 0.5) * 100;
       const endY = -50;
 
-      tl.fromTo(particle,
-        { 
+      tl.fromTo(
+        particle,
+        {
           x: startX,
           y: startY,
           opacity: 0,
           scale: 0,
         },
-        { 
+        {
           x: endX,
           y: endY,
           opacity: 1,
@@ -339,7 +364,7 @@ export class AnimationController {
             gsap.set(particle, { opacity: 0 });
           },
         },
-        delay
+        delay,
       );
     }
 
@@ -348,4 +373,53 @@ export class AnimationController {
 
   // Section transition animation
   sectionTransition(
-    from
+    from: string | Element,
+    to: string | Element,
+    config: AnimationConfig = {},
+  ): gsap.core.Timeline {
+    const tl = gsap.timeline(config);
+
+    // Animate out the current section
+    tl.to(from, {
+      opacity: 0,
+      y: -50,
+      scale: 0.95,
+      duration: config.duration || 0.8,
+      ease: config.ease || "power2.inOut",
+    })
+      // Animate in the new section
+      .fromTo(
+        to,
+        {
+          opacity: 0,
+          y: 50,
+          scale: 0.95,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: config.duration || 0.8,
+          ease: config.ease || "power2.out",
+        },
+        "-=0.4", // Start slightly before the previous animation ends
+      );
+
+    return tl;
+  }
+
+  // Clean up all animations
+  dispose(): void {
+    // Kill all timelines
+    this.timelines.forEach((timeline) => {
+      timeline.kill();
+    });
+    this.timelines.clear();
+
+    // Kill all scroll triggers
+    this.scrollTriggers.forEach((trigger) => {
+      trigger.kill();
+    });
+    this.scrollTriggers.clear();
+  }
+}
