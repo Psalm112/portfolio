@@ -1,0 +1,104 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-blueprint-lines;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-blueprint-bg text-blueprint-text;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-blueprint-dark;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-blueprint-primary rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-blueprint-secondary;
+  }
+}
+
+@layer components {
+  .blueprint-border {
+    @apply border border-blueprint-lines;
+    position: relative;
+  }
+  
+  .blueprint-border::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, transparent, rgba(100, 181, 246, 0.3), transparent);
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .blueprint-border:hover::before {
+    opacity: 1;
+  }
+  
+  .circuit-path {
+    stroke: #64b5f6;
+    stroke-width: 2;
+    fill: none;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: circuit 3s ease-in-out forwards;
+  }
+  
+  .glow-text {
+    text-shadow: 0 0 10px rgba(100, 181, 246, 0.5);
+  }
+  
+  .scan-line {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, #64b5f6, transparent);
+    animation: scan 2s linear infinite;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .backdrop-blur-strong {
+    backdrop-filter: blur(12px);
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
