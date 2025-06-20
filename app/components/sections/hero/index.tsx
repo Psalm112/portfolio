@@ -174,9 +174,11 @@ const Hero = () => {
             </motion.div>
           </motion.div>
         </div>
+        <CircuitBrainAnimation />
       </div>
 
       {/* Scroll Indicator */}
+
       <ScrollIndicator />
     </motion.section>
   );
