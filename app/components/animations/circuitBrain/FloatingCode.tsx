@@ -92,14 +92,14 @@ const FloatingCode = () => {
           key={index}
           position={element.position}
           rotation={element.rotation}
-          fontSize={0.1}
+          fontSize={0.08}
           maxWidth={2}
           lineHeight={1}
           letterSpacing={0.02}
           textAlign="left"
-          font="/fonts/JetBrainsMono-Regular.woff"
           anchorX="center"
           anchorY="middle"
+          // Remove the font prop to use default font
         >
           {element.text}
           <meshStandardMaterial

@@ -1,27 +1,27 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useCallback } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useScroll } from "framer-motion";
 import * as THREE from "three";
-import { Text, Sphere, Box, Cylinder } from "@react-three/drei";
+import { Sphere, Box, Cylinder } from "@react-three/drei";
 
 const CircuitBrain = () => {
   const groupRef = useRef<THREE.Group>(null);
   const circuitRef = useRef<THREE.Group>(null);
   const brainRef = useRef<THREE.Group>(null);
-  const { viewport } = useThree();
+  const { viewport, size } = useThree();
   const { scrollYProgress } = useScroll();
 
-  // Generate circuit board pattern
+  // Reduced complexity for better performance
   const circuitPaths = useMemo(() => {
     const paths = [];
-    const segments = 50;
+    const segments = 24; // Significantly reduced
 
     for (let i = 0; i < segments; i++) {
       const angle = (i / segments) * Math.PI * 2;
-      const radius = 2 + Math.sin(angle * 3) * 0.5;
-      const height = Math.sin(angle * 2) * 0.3;
+      const radius = 1.8 + Math.sin(angle * 2) * 0.3;
+      const height = Math.sin(angle * 1.5) * 0.2;
 
       paths.push({
         position: [
@@ -30,21 +30,22 @@ const CircuitBrain = () => {
           Math.sin(angle) * radius,
         ] as [number, number, number],
         rotation: [0, angle, 0] as [number, number, number],
-        scale: 0.1 + Math.random() * 0.05,
+        scale: 0.06 + Math.random() * 0.02,
+        hasComponent: Math.random() > 0.85, // Fewer components
       });
     }
     return paths;
   }, []);
 
-  // Generate brain neural nodes
+  // Optimized brain nodes
   const brainNodes = useMemo(() => {
     const nodes = [];
-    const count = 80;
+    const count = 32; // Reduced count
 
     for (let i = 0; i < count; i++) {
       const phi = Math.acos(-1 + (2 * i) / count);
       const theta = Math.sqrt(count * Math.PI) * phi;
-      const radius = 1.5 + Math.random() * 0.3;
+      const radius = 1.0 + Math.random() * 0.3;
 
       nodes.push({
         position: [
@@ -52,17 +53,16 @@ const CircuitBrain = () => {
           radius * Math.cos(phi),
           radius * Math.sin(theta) * Math.sin(phi),
         ] as [number, number, number],
-        size: 0.02 + Math.random() * 0.03,
-        connectionCount: Math.floor(Math.random() * 4) + 1,
+        size: 0.02 + Math.random() * 0.015,
       });
     }
     return nodes;
   }, []);
 
-  // Generate neural connections
+  // Simplified connections
   const neuralConnections = useMemo(() => {
     const connections = [];
-    const maxConnections = 100;
+    const maxConnections = 40; // Reduced
 
     for (let i = 0; i < maxConnections; i++) {
       const nodeA = brainNodes[Math.floor(Math.random() * brainNodes.length)];
@@ -79,7 +79,7 @@ const CircuitBrain = () => {
           connections.push({
             start: nodeA.position,
             end: nodeB.position,
-            opacity: Math.random() * 0.6 + 0.2,
+            opacity: Math.random() * 0.4 + 0.2,
           });
         }
       }
@@ -87,53 +87,51 @@ const CircuitBrain = () => {
     return connections;
   }, [brainNodes]);
 
-  useFrame((state) => {
-    if (!groupRef.current || !circuitRef.current || !brainRef.current) return;
+  // Throttled animation
+  let lastTime = 0;
+  const animateScene = useCallback(
+    (state: any) => {
+      const currentTime = state.clock.getElapsedTime();
+      if (currentTime - lastTime < 0.016) return; // ~60fps max
+      lastTime = currentTime;
 
-    const time = state.clock.getElapsedTime();
-    const scrollProgress = scrollYProgress.get();
+      if (!groupRef.current || !circuitRef.current || !brainRef.current) return;
 
-    // Morph between circuit board and brain
-    const morphProgress = Math.sin(time * 0.3) * 0.5 + 0.5;
-    const scrollMorph = 1 - scrollProgress;
-    const finalMorph = morphProgress * scrollMorph;
+      const time = currentTime;
+      const scrollProgress = scrollYProgress.get();
 
-    // Circuit board visibility and animation
-    circuitRef.current.visible = finalMorph > 0.3;
-    if (circuitRef.current.visible) {
-      circuitRef.current.rotation.y = time * 0.2;
-      circuitRef.current.children.forEach((child, index) => {
-        const offset = index * 0.1;
-        child.position.y = Math.sin(time + offset) * 0.1;
-        child.scale.setScalar(0.8 + Math.sin(time * 2 + offset) * 0.2);
-      });
-    }
+      // Simplified morph calculation
+      const morphProgress = (Math.sin(time * 0.15) + 1) * 0.5;
+      const scrollMorph = Math.max(0.2, 1 - scrollProgress * 0.6);
+      const finalMorph = morphProgress * scrollMorph;
 
-    // Brain visibility and animation
-    brainRef.current.visible = finalMorph < 0.7;
-    if (brainRef.current.visible) {
-      brainRef.current.rotation.y = time * 0.1;
-      brainRef.current.children.forEach((child, index) => {
-        if (child.userData.isNode) {
-          const offset = index * 0.05;
-          const pulse = Math.sin(time * 3 + offset) * 0.1 + 1;
-          child.scale.setScalar(pulse);
-        }
-      });
-    }
+      // Circuit visibility
+      circuitRef.current.visible = finalMorph > 0.4;
+      if (circuitRef.current.visible) {
+        circuitRef.current.rotation.y = time * 0.1;
+      }
 
-    // Overall group animation
-    groupRef.current.rotation.y = time * 0.05;
-    groupRef.current.position.y = Math.sin(time * 0.5) * 0.1;
+      // Brain visibility
+      brainRef.current.visible = finalMorph < 0.6;
+      if (brainRef.current.visible) {
+        brainRef.current.rotation.y = time * 0.05;
+      }
 
-    // Responsive scaling
-    const scale = Math.min(viewport.width / 10, viewport.height / 10, 1);
-    groupRef.current.scale.setScalar(scale);
-  });
+      // Overall rotation
+      groupRef.current.rotation.y = time * 0.02;
+
+      // Responsive scaling
+      const scale = Math.min(size.width / 800, size.height / 600, 1.2);
+      groupRef.current.scale.setScalar(Math.max(scale, 0.6));
+    },
+    [scrollYProgress, size]
+  );
+
+  useFrame(animateScene);
 
   return (
-    <group ref={groupRef} position={[2, 0, 0]}>
-      {/* Circuit Board */}
+    <group ref={groupRef} position={[0.5, 0, 0]}>
+      {/* Simplified Circuit Board */}
       <group ref={circuitRef}>
         {circuitPaths.map((path, index) => (
           <group
@@ -142,44 +140,30 @@ const CircuitBrain = () => {
             rotation={path.rotation}
           >
             {/* Circuit traces */}
-            <Cylinder args={[0.01, 0.01, 0.3]} rotation={[Math.PI / 2, 0, 0]}>
-              <meshStandardMaterial
+            <Cylinder args={[0.005, 0.005, 0.2]} rotation={[Math.PI / 2, 0, 0]}>
+              <meshBasicMaterial // Using basic material for performance
                 color="#64b5f6"
-                emissive="#64b5f6"
-                emissiveIntensity={0.2}
-                roughness={0.1}
-                metalness={0.8}
+                transparent
+                opacity={0.7}
               />
             </Cylinder>
 
             {/* Circuit nodes */}
             <Sphere args={[path.scale]}>
-              <meshStandardMaterial
-                color="#81c784"
-                emissive="#81c784"
-                emissiveIntensity={0.3}
-                roughness={0.2}
-                metalness={0.7}
-              />
+              <meshBasicMaterial color="#81c784" transparent opacity={0.8} />
             </Sphere>
 
-            {/* Circuit components */}
-            {Math.random() > 0.7 && (
-              <Box args={[0.05, 0.02, 0.08]} position={[0, 0.02, 0]}>
-                <meshStandardMaterial
-                  color="#ffb74d"
-                  emissive="#ffb74d"
-                  emissiveIntensity={0.1}
-                  roughness={0.3}
-                  metalness={0.6}
-                />
+            {/* Conditional components */}
+            {path.hasComponent && (
+              <Box args={[0.03, 0.01, 0.04]} position={[0, 0.01, 0]}>
+                <meshBasicMaterial color="#ffb74d" transparent opacity={0.9} />
               </Box>
             )}
           </group>
         ))}
       </group>
 
-      {/* Brain Neural Network */}
+      {/* Simplified Brain */}
       <group ref={brainRef}>
         {/* Neural connections */}
         {neuralConnections.map((connection, index) => {
@@ -192,25 +176,14 @@ const CircuitBrain = () => {
           return (
             <Cylinder
               key={`connection-${index}`}
-              args={[0.005, 0.005, length]}
+              args={[0.002, 0.002, length]}
               position={center.toArray()}
-              rotation={[
-                Math.atan2(
-                  direction.y,
-                  Math.sqrt(direction.x ** 2 + direction.z ** 2)
-                ),
-                Math.atan2(direction.x, direction.z),
-                0,
-              ]}
+              lookAt={end.toArray()}
             >
-              <meshStandardMaterial
+              <meshBasicMaterial
                 color="#64b5f6"
-                emissive="#64b5f6"
-                emissiveIntensity={connection.opacity}
                 transparent
                 opacity={connection.opacity}
-                roughness={0.1}
-                metalness={0.9}
               />
             </Cylinder>
           );
@@ -222,15 +195,8 @@ const CircuitBrain = () => {
             key={`node-${index}`}
             args={[node.size]}
             position={node.position}
-            userData={{ isNode: true }}
           >
-            <meshStandardMaterial
-              color="#81c784"
-              emissive="#81c784"
-              emissiveIntensity={0.4}
-              roughness={0.2}
-              metalness={0.8}
-            />
+            <meshBasicMaterial color="#81c784" transparent opacity={0.8} />
           </Sphere>
         ))}
       </group>

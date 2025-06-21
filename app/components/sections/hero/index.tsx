@@ -15,7 +15,10 @@ const CircuitBrainAnimation = dynamic(
     ssr: false,
     loading: () => (
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-32 h-32 border-2 border-blueprint-primary/30 rounded-full animate-pulse" />
+        <div className="relative">
+          <div className="w-32 h-32 border-2 border-blueprint-primary/30 rounded-full animate-spin border-t-blueprint-primary" />
+          <div className="absolute inset-4 border border-blueprint-secondary/20 rounded-full animate-pulse" />
+        </div>
       </div>
     ),
   }
@@ -103,10 +106,11 @@ const Hero = () => {
           ease: "easeOut",
         }}
       >
-        {!prefersReducedMotion && <CircuitBrainAnimation />}
+        {/* <CircuitBrainAnimation /> */}
+        {/* {!prefersReducedMotion && <CircuitBrainAnimation />}
 
         {/* Fallback for reduced motion */}
-        {prefersReducedMotion && (
+        {/* {prefersReducedMotion && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="relative">
               <div className="w-64 h-64 border-2 border-blueprint-primary/30 rounded-full" />
@@ -117,7 +121,7 @@ const Hero = () => {
               </div>
             </div>
           </div>
-        )}
+        )}  */}
       </motion.div>
 
       {/* Content Layer */}
