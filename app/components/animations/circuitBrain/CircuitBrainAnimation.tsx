@@ -170,9 +170,19 @@ const CircuitBrainAnimation = () => {
     rendererRef.current = gl;
 
     const rawGL = gl.getContext();
-    // Configure renderer for stability
+
+    // Configure renderer for maximum stability
     gl.setClearColor(0x000000, 0);
-    gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Reduced from 2
+
+    // Memory management settings
+    gl.shadowMap.enabled = false; // Disable shadows for better performance
+    gl.shadowMap.type = THREE.BasicShadowMap;
+    gl.outputColorSpace = THREE.SRGBColorSpace;
+    gl.toneMapping = THREE.NoToneMapping;
+
+    // Reduce memory usage
+    gl.setSize(window.innerWidth, window.innerHeight, false); // Don't update canvas size
 
     // Enable context loss extension for better recovery
     const loseContext = rawGL.getExtension("WEBGL_lose_context");
@@ -223,11 +233,11 @@ const CircuitBrainAnimation = () => {
         <Canvas
           ref={canvasRef}
           key={retryCount} // Force remount on retry
-          dpr={[1, Math.min(window.devicePixelRatio, 2)]} // Limit DPR for stability
+          dpr={[1, Math.min(window.devicePixelRatio, 1.5)]} // Reduced from 2
           performance={{
-            min: 0.3,
-            max: 1,
-            debounce: 200,
+            min: 0.5, // Increased from 0.3
+            max: 0.8, // Reduced from 1
+            debounce: 300, // Increased from 200
           }}
           gl={{
             antialias: false, // Disable for better performance
@@ -237,6 +247,8 @@ const CircuitBrainAnimation = () => {
             failIfMajorPerformanceCaveat: false,
             stencil: false,
             depth: true,
+            logarithmicDepthBuffer: false, // Disable for better performance
+            precision: "mediump", // Use medium precision for better performance
           }}
           style={{
             background: "transparent",
@@ -250,11 +262,12 @@ const CircuitBrainAnimation = () => {
             position: [0, 0, 8],
             fov: 45,
             near: 0.1,
-            far: 100, // Reduced far plane
+            far: 50, // Reduced from 100
           }}
           onCreated={handleCanvasCreated}
           onError={handleCanvasError}
           frameloop="demand" // Only render when needed
+          flat // Use flat rendering for better performance
         >
           {/* Simplified lighting for better performance */}
           <ambientLight intensity={0.5} />

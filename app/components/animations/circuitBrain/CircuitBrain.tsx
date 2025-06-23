@@ -10,18 +10,19 @@ const CircuitBrain = () => {
   const groupRef = useRef<THREE.Group>(null);
   const circuitRef = useRef<THREE.Group>(null);
   const brainRef = useRef<THREE.Group>(null);
+  const morphTimeRef = useRef(0);
   const { viewport, size } = useThree();
   const { scrollYProgress } = useScroll();
 
-  // Reduced complexity for better performance
+  // Optimized circuit paths with reduced complexity
   const circuitPaths = useMemo(() => {
     const paths = [];
-    const segments = 24; // Significantly reduced
+    const segments = 15; // Reduced from 20
 
     for (let i = 0; i < segments; i++) {
       const angle = (i / segments) * Math.PI * 2;
-      const radius = 1.8 + Math.sin(angle * 2) * 0.3;
-      const height = Math.sin(angle * 1.5) * 0.2;
+      const radius = 1.5 + Math.sin(angle * 3) * 0.2;
+      const height = Math.sin(angle * 2) * 0.15;
 
       paths.push({
         position: [
@@ -30,108 +31,157 @@ const CircuitBrain = () => {
           Math.sin(angle) * radius,
         ] as [number, number, number],
         rotation: [0, angle, 0] as [number, number, number],
-        scale: 0.06 + Math.random() * 0.02,
-        hasComponent: Math.random() > 0.85, // Fewer components
+        scale: 0.05 + Math.random() * 0.015,
+        hasComponent: Math.random() > 0.85, // Reduced from 0.8
+        componentType: Math.floor(Math.random() * 3), // 0: resistor, 1: capacitor, 2: chip
       });
     }
     return paths;
   }, []);
 
-  // Optimized brain nodes
+  // Optimized neural connections with reduced complexity
+  const neuralConnections = useMemo(() => {
+    const connections = [];
+    const connectionCount = 25; // Reduced from 35
+
+    for (let i = 0; i < connectionCount; i++) {
+      const start = [
+        (Math.random() - 0.5) * 2,
+        (Math.random() - 0.5) * 2,
+        (Math.random() - 0.5) * 2,
+      ] as [number, number, number];
+      const end = [
+        (Math.random() - 0.5) * 2,
+        (Math.random() - 0.5) * 2,
+        (Math.random() - 0.5) * 2,
+      ] as [number, number, number];
+
+      connections.push({
+        start,
+        end,
+        opacity: 0.3 + Math.random() * 0.4,
+      });
+    }
+    return connections;
+  }, []);
+
+  // Optimized brain nodes with reduced complexity
   const brainNodes = useMemo(() => {
     const nodes = [];
-    const count = 32; // Reduced count
+    const nodeCount = 20; // Reduced from 30
 
-    for (let i = 0; i < count; i++) {
-      const phi = Math.acos(-1 + (2 * i) / count);
-      const theta = Math.sqrt(count * Math.PI) * phi;
-      const radius = 1.0 + Math.random() * 0.3;
-
+    for (let i = 0; i < nodeCount; i++) {
       nodes.push({
         position: [
-          radius * Math.cos(theta) * Math.sin(phi),
-          radius * Math.cos(phi),
-          radius * Math.sin(theta) * Math.sin(phi),
+          (Math.random() - 0.5) * 2.5,
+          (Math.random() - 0.5) * 2.5,
+          (Math.random() - 0.5) * 2.5,
         ] as [number, number, number],
-        size: 0.02 + Math.random() * 0.015,
+        size: 0.02 + Math.random() * 0.03,
       });
     }
     return nodes;
   }, []);
 
-  // Simplified connections
-  const neuralConnections = useMemo(() => {
-    const connections = [];
-    const maxConnections = 40; // Reduced
-
-    for (let i = 0; i < maxConnections; i++) {
-      const nodeA = brainNodes[Math.floor(Math.random() * brainNodes.length)];
-      const nodeB = brainNodes[Math.floor(Math.random() * brainNodes.length)];
-
-      if (nodeA !== nodeB) {
-        const distance = Math.sqrt(
-          Math.pow(nodeA.position[0] - nodeB.position[0], 2) +
-            Math.pow(nodeA.position[1] - nodeB.position[1], 2) +
-            Math.pow(nodeA.position[2] - nodeB.position[2], 2)
-        );
-
-        if (distance < 0.8) {
-          connections.push({
-            start: nodeA.position,
-            end: nodeB.position,
-            opacity: Math.random() * 0.4 + 0.2,
-          });
-        }
-      }
-    }
-    return connections;
-  }, [brainNodes]);
-
-  // Throttled animation
-  let lastTime = 0;
+  // Optimized animation with requestAnimationFrame throttling
+  const lastFrameTime = useRef(0);
   const animateScene = useCallback(
     (state: any) => {
       const currentTime = state.clock.getElapsedTime();
-      if (currentTime - lastTime < 0.016) return; // ~60fps max
-      lastTime = currentTime;
+
+      // Throttle to 60fps max
+      if (currentTime - lastFrameTime.current < 1 / 60) return;
+      lastFrameTime.current = currentTime;
 
       if (!groupRef.current || !circuitRef.current || !brainRef.current) return;
 
-      const time = currentTime;
       const scrollProgress = scrollYProgress.get();
 
-      // Simplified morph calculation
-      const morphProgress = (Math.sin(time * 0.15) + 1) * 0.5;
-      const scrollMorph = Math.max(0.2, 1 - scrollProgress * 0.6);
-      const finalMorph = morphProgress * scrollMorph;
+      // Smooth morphing animation
+      morphTimeRef.current += 0.008; // Slower, smoother morphing
+      const morphProgress = (Math.sin(morphTimeRef.current) + 1) * 0.5;
+      const scrollInfluence = Math.max(0.1, 1 - scrollProgress * 0.8);
+      const finalMorph = morphProgress * scrollInfluence;
 
-      // Circuit visibility
-      circuitRef.current.visible = finalMorph > 0.4;
-      if (circuitRef.current.visible) {
-        circuitRef.current.rotation.y = time * 0.1;
+      // Circuit board visibility and animation
+      const circuitVisible = finalMorph > 0.3;
+      circuitRef.current.visible = circuitVisible;
+
+      if (circuitVisible) {
+        circuitRef.current.rotation.y = currentTime * 0.05;
+        circuitRef.current.position.y = Math.sin(currentTime * 0.3) * 0.02;
       }
 
-      // Brain visibility
-      brainRef.current.visible = finalMorph < 0.6;
-      if (brainRef.current.visible) {
-        brainRef.current.rotation.y = time * 0.05;
+      // Brain visibility and animation
+      const brainVisible = finalMorph < 0.7;
+      brainRef.current.visible = brainVisible;
+
+      if (brainVisible) {
+        brainRef.current.rotation.y = currentTime * 0.03;
+        brainRef.current.rotation.x = Math.sin(currentTime * 0.2) * 0.05;
       }
 
-      // Overall rotation
-      groupRef.current.rotation.y = time * 0.02;
+      // Overall group animation
+      groupRef.current.rotation.y = currentTime * 0.01;
 
       // Responsive scaling
-      const scale = Math.min(size.width / 800, size.height / 600, 1.2);
-      groupRef.current.scale.setScalar(Math.max(scale, 0.6));
+      const baseScale = Math.min(size.width / 1200, size.height / 800, 1);
+      const responsiveScale = Math.max(baseScale, 0.5);
+      groupRef.current.scale.setScalar(responsiveScale);
+
+      // Smooth position adjustment
+      groupRef.current.position.x = 0.3 + Math.sin(currentTime * 0.1) * 0.1;
     },
     [scrollYProgress, size]
   );
 
   useFrame(animateScene);
 
+  // Memoized materials for better performance
+  const circuitMaterial = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        color: "#64b5f6",
+        transparent: true,
+        opacity: 0.8,
+      }),
+    []
+  );
+
+  const nodeMaterial = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        color: "#81c784",
+        transparent: true,
+        opacity: 0.9,
+      }),
+    []
+  );
+
+  const componentMaterials = useMemo(
+    () => [
+      new THREE.MeshBasicMaterial({
+        color: "#ffb74d",
+        transparent: true,
+        opacity: 0.9,
+      }),
+      new THREE.MeshBasicMaterial({
+        color: "#f06292",
+        transparent: true,
+        opacity: 0.9,
+      }),
+      new THREE.MeshBasicMaterial({
+        color: "#ba68c8",
+        transparent: true,
+        opacity: 0.9,
+      }),
+    ],
+    []
+  );
+
   return (
-    <group ref={groupRef} position={[0.5, 0, 0]}>
-      {/* Simplified Circuit Board */}
+    <group ref={groupRef} position={[0, 0, 0]}>
+      {/* Optimized Circuit Board */}
       <group ref={circuitRef}>
         {circuitPaths.map((path, index) => (
           <group
@@ -140,30 +190,38 @@ const CircuitBrain = () => {
             rotation={path.rotation}
           >
             {/* Circuit traces */}
-            <Cylinder args={[0.005, 0.005, 0.2]} rotation={[Math.PI / 2, 0, 0]}>
-              <meshBasicMaterial // Using basic material for performance
-                color="#64b5f6"
-                transparent
-                opacity={0.7}
-              />
+            <Cylinder
+              args={[0.003, 0.003, 0.15]}
+              rotation={[Math.PI / 2, 0, 0]}
+            >
+              <primitive object={circuitMaterial} />
             </Cylinder>
 
             {/* Circuit nodes */}
             <Sphere args={[path.scale]}>
-              <meshBasicMaterial color="#81c784" transparent opacity={0.8} />
+              <primitive object={nodeMaterial} />
             </Sphere>
 
-            {/* Conditional components */}
+            {/* Electronic components */}
             {path.hasComponent && (
-              <Box args={[0.03, 0.01, 0.04]} position={[0, 0.01, 0]}>
-                <meshBasicMaterial color="#ffb74d" transparent opacity={0.9} />
+              <Box
+                args={
+                  path.componentType === 0
+                    ? [0.02, 0.005, 0.03]
+                    : path.componentType === 1
+                    ? [0.015, 0.01, 0.015]
+                    : [0.025, 0.008, 0.04]
+                }
+                position={[0, 0.008, 0]}
+              >
+                <primitive object={componentMaterials[path.componentType]} />
               </Box>
             )}
           </group>
         ))}
       </group>
 
-      {/* Simplified Brain */}
+      {/* Optimized Brain */}
       <group ref={brainRef}>
         {/* Neural connections */}
         {neuralConnections.map((connection, index) => {
@@ -176,7 +234,7 @@ const CircuitBrain = () => {
           return (
             <Cylinder
               key={`connection-${index}`}
-              args={[0.002, 0.002, length]}
+              args={[0.001, 0.001, length]}
               position={center.toArray()}
               lookAt={end.toArray()}
             >
@@ -189,7 +247,8 @@ const CircuitBrain = () => {
           );
         })}
 
-        {/* Neural nodes */}
+        {/* Neural nodes with pulsing effect */}
+
         {brainNodes.map((node, index) => (
           <Sphere
             key={`node-${index}`}

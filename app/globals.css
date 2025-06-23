@@ -1,15 +1,7 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-@font-face {
-  font-family: 'JetBrains Mono';
-  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2'),
-       url('/fonts/JetBrainsMono-Regular.woff') format('woff');
-  font-display: swap;
-}
 @layer base {
   * {
     @apply border-blueprint-lines;

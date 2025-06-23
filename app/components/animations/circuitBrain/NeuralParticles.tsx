@@ -9,7 +9,7 @@ const NeuralParticles = () => {
   const pointsRef = useRef<THREE.Points>(null);
 
   const [positions, colors, sizes] = useMemo(() => {
-    const count = 1000;
+    const count = 500;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     const sizes = new Float32Array(count);
@@ -22,7 +22,7 @@ const NeuralParticles = () => {
       const i3 = i * 3;
 
       // Spherical distribution around the brain
-      const radius = 3 + Math.random() * 4;
+      const radius = 3 + Math.random() * 3;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
 
@@ -39,7 +39,7 @@ const NeuralParticles = () => {
       colors[i3 + 1] = selectedColor.g;
       colors[i3 + 2] = selectedColor.b;
 
-      sizes[i] = Math.random() * 0.02 + 0.01;
+      sizes[i] = Math.random() * 0.015 + 0.008;
     }
 
     return [positions, colors, sizes];
@@ -52,30 +52,34 @@ const NeuralParticles = () => {
     const geometry = pointsRef.current.geometry;
     const positions = geometry.attributes.position.array as Float32Array;
 
-    // Animate particles
+    // Throttle animation updates to reduce GPU load
+    if (Math.floor(time * 30) % 2 !== 0) return; // Update every other frame
+
+    // Animate particles with reduced intensity
     for (let i = 0; i < positions.length; i += 3) {
       const index = i / 3;
-      const offset = index * 0.01;
+      const offset = index * 0.005; // Reduced from 0.01
 
-      // Create flowing motion along neural pathways
-      positions[i] += Math.sin(time + offset) * 0.001;
-      positions[i + 1] += Math.cos(time * 0.5 + offset) * 0.001;
-      positions[i + 2] += Math.sin(time * 0.7 + offset) * 0.001;
+      // Create flowing motion along neural pathways with reduced movement
+      positions[i] += Math.sin(time + offset) * 0.0005; // Reduced from 0.001
+      positions[i + 1] += Math.cos(time * 0.3 + offset) * 0.0005; // Reduced from 0.001
+      positions[i + 2] += Math.sin(time * 0.5 + offset) * 0.0005; // Reduced from 0.001
 
       // Keep particles within bounds
       const distance = Math.sqrt(
         positions[i] ** 2 + positions[i + 1] ** 2 + positions[i + 2] ** 2
       );
 
-      if (distance > 8) {
-        positions[i] *= 0.5;
-        positions[i + 1] *= 0.5;
-        positions[i + 2] *= 0.5;
+      if (distance > 6) {
+        // Reduced from 8
+        positions[i] *= 0.6; // Reduced from 0.5
+        positions[i + 1] *= 0.6;
+        positions[i + 2] *= 0.6;
       }
     }
 
     geometry.attributes.position.needsUpdate = true;
-    pointsRef.current.rotation.y = time * 0.02;
+    pointsRef.current.rotation.y = time * 0.01; // Reduced from 0.02
   });
 
   return (

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Orbitron } from "next/font/google";
 import "./globals.css";
 // import { Analytics } from "@vercel/analytics/react";
@@ -50,9 +50,14 @@ export const metadata: Metadata = {
     description:
       "Expert in Frontend Development, Communications Systems, and Embedded Engineering",
   },
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#64b5f6",
 };
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+export const themeColor = "#64b5f6";
 
 export default function RootLayout({
   children,
@@ -63,7 +68,48 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} ${orbitron.variable}`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Global WebGL context loss handler
+              window.addEventListener('webglcontextlost', function(event) {
+                console.warn('WebGL context lost globally, attempting recovery...');
+                event.preventDefault();
+                
+                // Set a flag for components to check
+                window.webglContextLost = true;
+                
+                // Attempt recovery after a delay
+                setTimeout(() => {
+                  window.webglContextLost = false;
+                  console.log('WebGL context recovery attempted');
+                }, 2000);
+              });
+              
+              // Prevent multiple rapid context losses
+              let contextLossCount = 0;
+              let lastContextLoss = 0;
+              
+              window.addEventListener('webglcontextlost', function(event) {
+                const now = Date.now();
+                if (now - lastContextLoss < 5000) {
+                  contextLossCount++;
+                } else {
+                  contextLossCount = 1;
+                }
+                lastContextLoss = now;
+                
+                if (contextLossCount > 3) {
+                  console.error('Multiple WebGL context losses detected. Consider reducing graphics quality.');
+                }
+              });
+            `,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased bg-blueprint-bg text-blueprint-text overflow-x-hidden">
         <div className="fixed inset-0 bg-blueprint-grid bg-blueprint-grid opacity-30 pointer-events-none" />
         <div className="relative z-10">{children}</div>
