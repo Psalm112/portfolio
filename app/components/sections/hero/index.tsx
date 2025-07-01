@@ -37,39 +37,6 @@ const Hero: React.FC = () => {
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number | null>(null);
 
-  const skills = [
-    "React",
-    "TypeScript",
-    "Next.js",
-    "Node.js",
-    "GraphQL",
-    "AWS",
-    "Docker",
-    "Python",
-    "MongoDB",
-    "PostgreSQL",
-  ];
-
-  const codeSnippets = [
-    `const developer = {
-  name: "YourName",
-  role: "Senior Frontend Engineer",
-  passion: "Creating Digital Experiences",
-  expertise: ["React", "TypeScript", "Performance"]
-};`,
-    `// Optimized for performance
-const useOptimizedState = () => {
-  return useMemo(() => 
-    heavyComputation(), [dependencies]
-  );
-};`,
-    `interface Innovation {
-  creativity: boolean;
-  technology: "cutting-edge";
-  impact: "transformative";
-}`,
-  ];
-
   // Initialize particles
   const initParticles = () => {
     const canvas = canvasRef.current;
@@ -223,53 +190,6 @@ const useOptimizedState = () => {
           "-=0.6"
         );
 
-      // Typing effect for code blocks
-      let currentSnippet = 0;
-      const typeCode = () => {
-        if (!codeBlockRef.current) return;
-
-        setIsTyping(true);
-        gsap.to(codeBlockRef.current, {
-          text: codeSnippets[currentSnippet],
-          duration: 2,
-          ease: "none",
-          onComplete: () => {
-            setTimeout(() => {
-              gsap.to(codeBlockRef.current, {
-                text: "",
-                duration: 0.5,
-                ease: "none",
-                onComplete: () => {
-                  currentSnippet = (currentSnippet + 1) % codeSnippets.length;
-                  setTimeout(typeCode, 500);
-                },
-              });
-            }, 3000);
-          },
-        });
-      };
-
-      setTimeout(typeCode, 2000);
-
-      // Skills animation
-      gsap.from(skillsRef.current?.children || [], {
-        scale: 0,
-        rotation: 180,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: "back.out(1.7)",
-        delay: 1.5,
-      });
-
-      // Stats counter animation
-      gsap.from(statsRef.current?.children || [], {
-        scale: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "back.out(1.7)",
-        delay: 2,
-      });
-
       // Scroll indicator animation
       gsap.to(scrollIndicatorRef.current, {
         y: 10,
@@ -279,7 +199,6 @@ const useOptimizedState = () => {
         ease: "power2.inOut",
       });
 
-      // Parallax scrolling effects
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top top",
@@ -452,59 +371,6 @@ const useOptimizedState = () => {
               ))}
             </div>
           </div>
-
-          {/* Right Content */}
-          <div className="lg:col-span-5 space-y-8">
-            {/* Code Block */}
-            <div className="bg-gray-900/80 backdrop-blur-sm border border-cyan-500/30 rounded-xl p-6 font-mono text-sm">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-gray-400 ml-4">portfolio.ts</span>
-              </div>
-              <pre
-                ref={codeBlockRef}
-                className="text-cyan-300 min-h-[200px] whitespace-pre-wrap"
-              >
-                {/* Dynamic typing content */}
-              </pre>
-              {isTyping && (
-                <span className="inline-block w-2 h-5 bg-cyan-400 animate-pulse ml-1" />
-              )}
-            </div>
-
-            {/* Skills Tags */}
-            <div ref={skillsRef} className="flex flex-wrap gap-3">
-              {skills.map((skill, index) => (
-                <span
-                  key={skill}
-                  className="px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-full text-cyan-300 text-sm font-medium hover:from-cyan-500/30 hover:to-blue-500/30 transition-all duration-300 cursor-default"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-
-            {/* Stats */}
-            <div ref={statsRef} className="grid grid-cols-3 gap-6">
-              {[
-                { label: "Years Experience", value: "15+" },
-                { label: "Projects Completed", value: "200+" },
-                { label: "Client Satisfaction", value: "99%" },
-              ].map(({ label, value }) => (
-                <div
-                  key={label}
-                  className="text-center p-4 bg-gray-800/50 rounded-lg border border-gray-700"
-                >
-                  <div className="text-2xl lg:text-3xl font-bold text-cyan-400 mb-1">
-                    {value}
-                  </div>
-                  <div className="text-sm text-gray-400">{label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
@@ -515,7 +381,7 @@ const useOptimizedState = () => {
         onClick={scrollToNext}
       >
         <div className="flex flex-col items-center text-gray-400 hover:text-cyan-400 transition-colors duration-300">
-          <span className="text-sm mb-2 font-medium">Scroll to explore</span>
+          {/* <span className="text-sm mb-2 font-medium">Scroll to explore</span> */}
           <div className="w-6 h-10 border-2 border-current rounded-full flex justify-center">
             <div className="w-1 h-3 bg-current rounded-full mt-2 animate-pulse" />
           </div>
