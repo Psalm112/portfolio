@@ -55,30 +55,30 @@ const SkillBar = ({
   );
 };
 
-const CircuitPattern = () => (
-  <div className="absolute inset-0 opacity-5 pointer-events-none">
-    <svg width="100%" height="100%" className="animate-pulse">
-      <defs>
-        <pattern
-          id="circuit"
-          patternUnits="userSpaceOnUse"
-          width="100"
-          height="100"
-        >
-          <path
-            d="M10,10 L90,10 L90,90 L10,90 Z"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-          />
-          <circle cx="10" cy="10" r="2" fill="currentColor" />
-          <circle cx="90" cy="90" r="2" fill="currentColor" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#circuit)" />
-    </svg>
-  </div>
-);
+// const CircuitPattern = () => (
+//   <div className="absolute inset-0 opacity-5 pointer-events-none">
+//     <svg width="100%" height="100%" className="animate-pulse">
+//       <defs>
+//         <pattern
+//           id="circuit"
+//           patternUnits="userSpaceOnUse"
+//           width="100"
+//           height="100"
+//         >
+//           <path
+//             d="M10,10 L90,10 L90,90 L10,90 Z"
+//             fill="none"
+//             stroke="currentColor"
+//             strokeWidth="1"
+//           />
+//           <circle cx="10" cy="10" r="2" fill="currentColor" />
+//           <circle cx="90" cy="90" r="2" fill="currentColor" />
+//         </pattern>
+//       </defs>
+//       <rect width="100%" height="100%" fill="url(#circuit)" />
+//     </svg>
+//   </div>
+// );
 // Animated counter component
 const AnimatedCounter = ({
   end,
@@ -304,8 +304,8 @@ export default function About() {
                   blockchain-secured IoT networks
                 </span>{" "}
                 that achieved 2,500 TPS with 95% energy efficiency improvement.
-                I've created everything from autonomous coffee delivery robots
-                to warehouse management systems powered by Graph Neural
+                I&apos;ve created everything from autonomous coffee delivery
+                robots to warehouse management systems powered by Graph Neural
                 Networks.
               </motion.p>
 
@@ -318,7 +318,7 @@ export default function About() {
               >
                 What sets me apart is my ability to bridge the gap between
                 intuitive user interfaces and complex backend systems, whether
-                it's integrating machine learning algorithms into web
+                it&apos;s integrating machine learning algorithms into web
                 applications or designing hardware-software architectures that
                 scale from prototype to production.
               </motion.p>
@@ -478,10 +478,10 @@ export default function About() {
               </div>
 
               <blockquote className="font-inter text-base lg:text-lg text-gray-300 leading-relaxed italic">
-                "The future belongs to systems that seamlessly integrate the
-                digital and physical worlds. Every line of code I write and
+                &quot;The future belongs to systems that seamlessly integrate
+                the digital and physical worlds. Every line of code I write and
                 every circuit I design is a step toward making technology more
-                intelligent, accessible, and human-centered."
+                intelligent, accessible, and human-centered.&quot;
               </blockquote>
             </motion.div>
           </motion.div>
@@ -502,8 +502,8 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ delay: 0.7, duration: 0.6 }}
           >
-            Ready to bring your next innovative project to life? Let's build
-            something extraordinary together.
+            Ready to bring your next innovative project to life? Let&apos;s
+            build something extraordinary together.
           </motion.p>
 
           <motion.div
@@ -544,7 +544,7 @@ export default function About() {
               aria-label="Get in touch for collaboration opportunities"
             >
               <span className="flex items-center justify-center space-x-2">
-                <span>Let's Connect</span>
+                <span>Let&apos;s Connect</span>
                 <svg
                   className="w-4 h-4 group-hover:scale-110 transition-transform"
                   fill="currentColor"

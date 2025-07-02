@@ -14,6 +14,14 @@ import { motion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Define the TechMaterial type
+type TechMaterialType = {
+  uTime: number;
+  uColor1: THREE.Color;
+  uColor2: THREE.Color;
+  uColor3: THREE.Color;
+};
+
 // shader material
 const TechMaterial = shaderMaterial(
   {
@@ -80,7 +88,7 @@ extend({ TechMaterial });
 
 declare module "@react-three/fiber" {
   interface ThreeElements {
-    techMaterial: any;
+    techMaterial: Partial<TechMaterialType>;
   }
 }
 
@@ -157,8 +165,9 @@ function TechSculpture() {
 
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
-    if (meshRef.current) {
-      (meshRef.current.material as any).uTime = time;
+    if (meshRef.current && meshRef.current.material) {
+      const material = meshRef.current.material as unknown as TechMaterialType;
+      material.uTime = time;
     }
     if (groupRef.current) {
       groupRef.current.rotation.y = time * 0.1;
@@ -171,7 +180,7 @@ function TechSculpture() {
       {/* Main torus knot */}
       <mesh ref={meshRef} rotation={[0.5, 0, 0]} scale={1.2}>
         <torusKnotGeometry args={[1, 0.3, 260, 32]} />
-        <techMaterial attach="material" />
+        <techMaterial />
       </mesh>
 
       {/* Additional smaller elements for visual interest */}
@@ -361,7 +370,8 @@ export default function Hero() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="font-jetbrains text-cyan-400 text-sm sm:text-base tracking-wider uppercase"
           >
-            Hello, I'm Samuel <span className="max-lg:hidden">Adebola</span>
+            Hello, I&apos;m Samuel&nbsp;
+            <span className="max-lg:hidden">Adebola</span>
             &nbsp; Oyenuga
           </motion.div>
 

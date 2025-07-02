@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  motion,
-  useInView,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { motion, useInView, useMotionValue, useTransform } from "framer-motion";
 import { useRef, useEffect } from "react";
 
 const StatsCounter = () => {
@@ -47,7 +41,7 @@ interface CounterProps {
 const Counter = ({ value, label, suffix, isInView, delay }: CounterProps) => {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
-  const springCount = useSpring(count, { duration: 2000 });
+  // const springCount = useSpring(count, { duration: 2000 });
 
   useEffect(() => {
     if (isInView) {

@@ -1,18 +1,24 @@
 import React, { useRef, useEffect, useState, useMemo } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import {
-  Text,
   Float,
   OrbitControls,
   Html,
   MeshDistortMaterial,
-  Sphere,
   Line,
 } from "@react-three/drei";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
+
+interface SkillsType {
+  label: string;
+  proficiency: number;
+  category: string;
+  color: string;
+  position: [number, number, number];
+}
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,7 +102,7 @@ const SkillNode = ({
 };
 
 // Connecting Lines Component
-const SkillConnections = ({ skills }: { skills: any[] }) => {
+const SkillConnections = ({ skills }: { skills: SkillsType[] }) => {
   const linesRef = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
@@ -129,12 +135,11 @@ const SkillConnections = ({ skills }: { skills: any[] }) => {
           new THREE.Vector3(...connection.from),
           new THREE.Vector3(...connection.to),
         ];
-        const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
         return (
           <Line
             key={index}
-            points={[connection.from, connection.to]}
+            points={points}
             color="#00D4FF"
             transparent
             opacity={connection.opacity}
@@ -148,7 +153,7 @@ const SkillConnections = ({ skills }: { skills: any[] }) => {
 
 // Skills 3D Scene
 const Skills3DScene = () => {
-  const skills = [
+  const skills: SkillsType[] = [
     // Frontend Skills
     {
       label: "React.js",
@@ -674,7 +679,8 @@ export default function Skills() {
             transition={{ delay: 0.7, duration: 0.6 }}
           >
             Ready to leverage these skills for your next groundbreaking project?
-            Let's build something that pushes the boundaries of what's possible.
+            Let&apos;s build something that pushes the boundaries of what&apos;s
+            possible.
           </motion.p>
 
           <motion.button

@@ -11,10 +11,9 @@ import Hero from "@/app/components/sections/hero";
 // import ProjectsSection from "@/components/sections/projects";
 // import ExperienceSection from "@/components/sections/experience";
 // import ContactSection from "@/components/sections/contact";
-import Navigation from "@/app/components/layout/Navigation";
+// import Navigation from "@/app/components/layout/Navigation";
 import LoadingScreen from "@/app/components/ui/LoadingScreen";
 import ScrollProgress from "@/app/components/ui/ScrollProgress";
-import { useScrollSpy } from "@/app/hooks/useScrollSpy";
 import Skills from "./components/sections/skills";
 
 const About = dynamic(() => import("@/app/components/sections/about"), {
@@ -25,16 +24,16 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
-  const sections = [
-    "hero",
-    "about",
-    "frontend",
-    "communications",
-    "embedded",
-    "projects",
-    "experience",
-    "contact",
-  ];
+  // const sections = [
+  //   "hero",
+  //   "about",
+  //   "frontend",
+  //   "communications",
+  //   "embedded",
+  //   "projects",
+  //   "experience",
+  //   "contact",
+  // ];
 
   // const activeSection = useScrollSpy(sections);
 
