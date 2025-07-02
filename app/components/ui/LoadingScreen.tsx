@@ -41,7 +41,7 @@ const LoadingScreen = () => {
     }, 300);
 
     return () => clearInterval(textInterval);
-  }, []);
+  }, [loadingStages]);
 
   return (
     <motion.div

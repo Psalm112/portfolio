@@ -74,7 +74,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export const themeColor = "#64b5f6";
+// export const themeColor = "#64b5f6";
 
 export default function RootLayout({
   children,
