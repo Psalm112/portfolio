@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import Hero from "@/app/components/sections/hero";
-import About from "@/app/components/sections/about";
+// import About from "@/app/components/sections/about";
 // import FrontendSection from "@/components/sections/frontend";
 // import CommunicationsSection from "@/components/sections/communications";
 // import EmbeddedSection from "@/components/sections/embedded";
@@ -15,11 +15,11 @@ import Navigation from "@/app/components/layout/Navigation";
 import LoadingScreen from "@/app/components/ui/LoadingScreen";
 import ScrollProgress from "@/app/components/ui/ScrollProgress";
 import { useScrollSpy } from "@/app/hooks/useScrollSpy";
+import Skills from "./components/sections/skills";
 
-const BackgroundEffects = dynamic(
-  () => import("@/app/components/ui/BackgroundEffects"),
-  { ssr: false }
-);
+const About = dynamic(() => import("@/app/components/sections/about"), {
+  ssr: false,
+});
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +36,7 @@ export default function Home() {
     "contact",
   ];
 
-  const activeSection = useScrollSpy(sections);
+  // const activeSection = useScrollSpy(sections);
 
   useEffect(() => {
     setMounted(true);
@@ -65,17 +65,18 @@ export default function Home() {
           >
             {/* <BackgroundEffects /> */}
             <ScrollProgress />
-            <Navigation activeSection={activeSection} />
+            {/* <Navigation activeSection={activeSection} /> */}
 
             <div className="relative">
-              <section id="hero">
-                <Hero />
-              </section>
+              <Hero />
 
-              <section id="about">
-                <About />
-              </section>
+              <Suspense fallback={<div>Loading...</div>}>
+                <div>
+                  <About />
+                </div>
+              </Suspense>
 
+              <Skills />
               {/* <section id="frontend">
                 <FrontendSection />
               </section>

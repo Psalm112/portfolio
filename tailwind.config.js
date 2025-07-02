@@ -24,7 +24,10 @@ module.exports = {
       fontFamily: {
         mono: ["JetBrains Mono", "monospace"],
         sans: ["Inter", "sans-serif"],
-        tech: ["Orbitron", "monospace"],
+        orbitron: ["Orbitron", "monospace"],
+        jetbrains: ["JetBrains Mono", "monospace"],
+        "space-grotesk": ["Space Grotesk", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
       animation: {
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",

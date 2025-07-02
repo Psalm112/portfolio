@@ -1,29 +1,46 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Orbitron } from "next/font/google";
+// import { Inter, JetBrains_Mono, Orbitron } from "next/font/google";
 import "./globals.css";
 // import { Analytics } from "@vercel/analytics/react";
 // import { SpeedInsights } from "@vercel/speed-insights/next";
+import {
+  Inter,
+  JetBrains_Mono,
+  Space_Grotesk,
+  Orbitron,
+} from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-jetbrains",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
 const orbitron = Orbitron({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-orbitron",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Your Name | Frontend, Communications & Embedded Systems Engineer",
+  title:
+    "Samuel Adebola Oyenuga | Frontend, Communications & Embedded Systems Engineer",
   description:
     "Expert Frontend Engineer specializing in Next.js, React, and modern web technologies. Communications Engineer with expertise in signal processing and network systems. Embedded Systems Engineer creating innovative IoT and robotics solutions.",
   keywords: [
@@ -36,17 +53,17 @@ export const metadata: Metadata = {
     "Robotics",
     "IoT",
   ],
-  authors: [{ name: "Your Name" }],
+  authors: [{ name: "Samuel Adebola Oyenuga" }],
   openGraph: {
-    title: "Your Name | Multi-Disciplinary Engineer",
+    title: "Samuel Adebola Oyenuga | Multi-Disciplinary Engineer",
     description:
       "Expert in Frontend Development, Communications Systems, and Embedded Engineering",
     type: "website",
-    locale: "en_US",
+    locale: "en_NG",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Your Name | Multi-Disciplinary Engineer",
+    title: "Samuel Adebola Oyenuga | Multi-Disciplinary Engineer",
     description:
       "Expert in Frontend Development, Communications Systems, and Embedded Engineering",
   },
@@ -67,7 +84,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${orbitron.variable}`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable}  ${orbitron.variable}`}
       suppressHydrationWarning
     >
       <head>
