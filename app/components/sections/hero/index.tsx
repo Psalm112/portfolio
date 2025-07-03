@@ -372,7 +372,7 @@ export default function Hero() {
           >
             Hello, I&apos;m Samuel&nbsp;
             <span className="max-lg:hidden">Adebola</span>
-            &nbsp; Oyenuga
+            &nbsp;Oyenuga
           </motion.div>
 
           {/* Main Headline */}
