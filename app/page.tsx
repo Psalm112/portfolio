@@ -14,9 +14,15 @@ import Hero from "@/app/components/sections/hero";
 // import Navigation from "@/app/components/layout/Navigation";
 import LoadingScreen from "@/app/components/ui/LoadingScreen";
 import ScrollProgress from "@/app/components/ui/ScrollProgress";
-import Skills from "./components/sections/skills";
+// import Skills from "./components/sections/skills";
 
 const About = dynamic(() => import("@/app/components/sections/about"), {
+  ssr: false,
+});
+const Skills = dynamic(() => import("@/app/components/sections/skills"), {
+  ssr: false,
+});
+const Projects = dynamic(() => import("@/app/components/sections/projects"), {
   ssr: false,
 });
 
@@ -74,8 +80,18 @@ export default function Home() {
                   <About />
                 </div>
               </Suspense>
+              <Suspense fallback={<div>Loading...</div>}>
+                <div>
+                  <Skills />
+                </div>
+              </Suspense>
 
-              <Skills />
+              <Suspense fallback={<div>Loading...</div>}>
+                <div>
+                  <Projects />
+                </div>
+              </Suspense>
+
               {/* <section id="frontend">
                 <FrontendSection />
               </section>
