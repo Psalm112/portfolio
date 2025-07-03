@@ -127,8 +127,8 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased bg-blueprint-bg text-blueprint-text overflow-x-hidden">
-        <div className="fixed inset-0 bg-blueprint-grid bg-blueprint-grid opacity-30 pointer-events-none" />
+      <body className="font-sans antialiased text-blueprint-text overflow-x-hidden">
+        {/* <div className="fixed inset-0 bg-blueprint-grid bg-blueprint-grid opacity-30 pointer-events-none" /> */}
         <div className="relative z-10">{children}</div>
         {/* <Analytics />
         <SpeedInsights /> */}

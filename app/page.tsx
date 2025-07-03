@@ -25,6 +25,12 @@ const Skills = dynamic(() => import("@/app/components/sections/skills"), {
 const Projects = dynamic(() => import("@/app/components/sections/projects"), {
   ssr: false,
 });
+const Experience = dynamic(
+  () => import("@/app/components/sections/experience"),
+  {
+    ssr: false,
+  }
+);
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -89,6 +95,11 @@ export default function Home() {
               <Suspense fallback={<div>Loading...</div>}>
                 <div>
                   <Projects />
+                </div>
+              </Suspense>
+              <Suspense fallback={<div>Loading...</div>}>
+                <div>
+                  <Experience />
                 </div>
               </Suspense>
 
