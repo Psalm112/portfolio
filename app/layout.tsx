@@ -1,8 +1,5 @@
 import type { Metadata, Viewport } from "next";
-// import { Inter, JetBrains_Mono, Orbitron } from "next/font/google";
 import "./globals.css";
-// import { Analytics } from "@vercel/analytics/react";
-// import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
   Inter,
   JetBrains_Mono,
@@ -73,9 +70,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  colorScheme: "dark",
 };
-
-// export const themeColor = "#64b5f6";
 
 export default function RootLayout({
   children,
@@ -85,22 +81,47 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable}  ${orbitron.variable} bg-gradient-to-br from-gray-900 via-black to-gray-800`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable} ${orbitron.variable}`}
       suppressHydrationWarning
+      style={{
+        backgroundColor: "#0f172a",
+        backgroundImage:
+          "linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%)",
+        backgroundAttachment: "fixed",
+        minHeight: "100vh",
+      }}
     >
       <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+            html, body {
+              background-color: #0f172a !important;
+              background-image: linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%) !important;
+              background-attachment: fixed !important;
+              min-height: 100vh !important;
+            }
+            
+            .section-transition {
+              background: linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%);
+              background-attachment: fixed;
+            }
+          `,
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
+              // Prevent white flashes
+              document.documentElement.style.backgroundColor = '#0f172a';
+              document.documentElement.style.backgroundImage = 'linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%)';
+              document.documentElement.style.backgroundAttachment = 'fixed';
+              
               // Global WebGL context loss handler
               window.addEventListener('webglcontextlost', function(event) {
                 console.warn('WebGL context lost globally, attempting recovery...');
                 event.preventDefault();
-                
-                // Set a flag for components to check
                 window.webglContextLost = true;
-                
-                // Attempt recovery after a delay
                 setTimeout(() => {
                   window.webglContextLost = false;
                   console.log('WebGL context recovery attempted');
@@ -128,11 +149,17 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="relative font-sans antialiased overflow-x-hidden min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
+      <body
+        className="relative font-sans antialiased overflow-x-hidden min-h-screen force-bg performance-optimized"
+        style={{
+          backgroundColor: "#0f172a",
+          backgroundImage:
+            "linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%)",
+          backgroundAttachment: "fixed",
+        }}
+      >
         <ScrollProgress />
-        <div className="relative z-10">{children}</div>
-        {/* <Analytics />
-        <SpeedInsights /> */}
+        <div className="relative z-10 force-bg min-h-screen">{children}</div>
       </body>
     </html>
   );
