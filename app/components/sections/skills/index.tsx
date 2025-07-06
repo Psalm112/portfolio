@@ -11,14 +11,7 @@ import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
-
-interface SkillsType {
-  label: string;
-  proficiency: number;
-  category: string;
-  color: string;
-  position: [number, number, number];
-}
+import { skills, SkillsType } from "./data/skills";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -153,114 +146,6 @@ const SkillConnections = ({ skills }: { skills: SkillsType[] }) => {
 
 // Skills 3D Scene
 const Skills3DScene = () => {
-  const skills: SkillsType[] = [
-    // Frontend Skills
-    {
-      label: "React.js",
-      proficiency: 95,
-      category: "Frontend",
-      color: "#61DAFB",
-      position: [2, 1, 0] as [number, number, number],
-    },
-    {
-      label: "Next.js",
-      proficiency: 92,
-      category: "Frontend",
-      color: "#000000",
-      position: [3, -1, 1] as [number, number, number],
-    },
-    {
-      label: "TypeScript",
-      proficiency: 92,
-      category: "Frontend",
-      color: "#3178C6",
-      position: [1, 2, -1] as [number, number, number],
-    },
-    {
-      label: "Tailwind CSS",
-      proficiency: 90,
-      category: "Frontend",
-      color: "#06B6D4",
-      position: [-1, 1.5, 0] as [number, number, number],
-    },
-
-    // Backend & Integration
-    {
-      label: "Node.js",
-      proficiency: 85,
-      category: "Backend",
-      color: "#339933",
-      position: [-2, 0, 1] as [number, number, number],
-    },
-    {
-      label: "REST APIs",
-      proficiency: 88,
-      category: "Backend",
-      color: "#FF6B35",
-      position: [-3, -1, -1] as [number, number, number],
-    },
-    {
-      label: "Firebase",
-      proficiency: 82,
-      category: "Backend",
-      color: "#FFCA28",
-      position: [0, -2, 1] as [number, number, number],
-    },
-
-    // Embedded Systems
-    {
-      label: "Arduino",
-      proficiency: 90,
-      category: "Embedded",
-      color: "#00979D",
-      position: [2, -2, -1] as [number, number, number],
-    },
-    {
-      label: "IoT Systems",
-      proficiency: 88,
-      category: "Embedded",
-      color: "#4CAF50",
-      position: [-2, 2, 1] as [number, number, number],
-    },
-    {
-      label: "Sensors & Actuators",
-      proficiency: 85,
-      category: "Embedded",
-      color: "#9C27B0",
-      position: [0, 0, -2] as [number, number, number],
-    },
-
-    // AI/ML & Blockchain
-    {
-      label: "Machine Learning",
-      proficiency: 82,
-      category: "AI/ML",
-      color: "#FF9800",
-      position: [-1, -1, 2] as [number, number, number],
-    },
-    {
-      label: "Graph Neural Networks",
-      proficiency: 78,
-      category: "AI/ML",
-      color: "#E91E63",
-      position: [1, 0, 2] as [number, number, number],
-    },
-    {
-      label: "Blockchain",
-      proficiency: 85,
-      category: "Blockchain",
-      color: "#F7931E",
-      position: [0, 3, 0] as [number, number, number],
-    },
-    {
-      label: "Smart Contracts",
-      proficiency: 80,
-      category: "Blockchain",
-      color: "#627EEA",
-      position: [-1, -3, 0] as [number, number, number],
-    },
-  ];
-
   return (
     <>
       <ambientLight intensity={0.4} />
@@ -525,8 +410,7 @@ export default function Skills() {
   return (
     <section
       ref={sectionRef}
-      id="skills"
-      className="relative py-20 lg:py-32 bg-gradient-to-b from-black via-gray-900 to-gray-800 overflow-hidden"
+      className="relative py-20 lg:py-32 overflow-hidden"
       role="main"
       aria-labelledby="skills-heading"
     >

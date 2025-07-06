@@ -1,20 +1,23 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 const LoadingScreen = () => {
   const [progress, setProgress] = useState(0);
   const [loadingText, setLoadingText] = useState("Initializing");
 
-  const loadingStages = [
-    "Initializing...",
-    "Loading Frontend Modules...",
-    "Connecting Communication Systems...",
-    "Booting Embedded Components...",
-    "Synchronizing Data...",
-    "Ready to Launch!",
-  ];
+  const loadingStages = useMemo(
+    () => [
+      "Initializing...",
+      "Loading Frontend Modules...",
+      "Connecting Communication Systems...",
+      "Booting Embedded Components...",
+      "Synchronizing Data...",
+      "Ready to Launch!",
+    ],
+    []
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -45,7 +48,7 @@ const LoadingScreen = () => {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-blueprint-bg"
+      className="fixed inset-0 z-50 flex items-center justify-center "
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
@@ -114,16 +117,16 @@ const LoadingScreen = () => {
 
         {/* Progress Bar */}
         <div className="w-80 mx-auto space-y-4">
-          <div className="h-1 bg-blueprint-lines rounded-full overflow-hidden">
+          <div className="h-1 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-blueprint-primary to-blueprint-secondary rounded-full"
+              className="h-full bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full"
               style={{ width: `${Math.min(progress, 100)}%` }}
               transition={{ duration: 0.3 }}
             />
           </div>
 
           {/* Progress Text */}
-          <div className="flex justify-between text-sm font-mono text-blueprint-muted">
+          <div className="flex justify-between text-sm font-mono">
             <span>{Math.round(progress)}%</span>
             <motion.span
               key={loadingText}
@@ -141,7 +144,7 @@ const LoadingScreen = () => {
           {Array.from({ length: 50 }, (_, i) => (
             <motion.div
               key={i}
-              className="absolute text-blueprint-primary font-mono text-xs"
+              className="absolute font-mono text-xs"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `-20px`,

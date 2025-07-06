@@ -3,7 +3,6 @@ const path = require("path");
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   poweredByHeader: false,
   experimental: {
     optimizePackageImports: [
@@ -32,7 +31,38 @@ const nextConfig: NextConfig = {
         },
       ],
     });
+
+    // Optimize Three.js bundle
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        three: path.resolve("./node_modules/three"),
+      };
+    }
+
     return config;
+  },
+  // Add performance headers
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+        ],
+      },
+    ];
   },
 };
 

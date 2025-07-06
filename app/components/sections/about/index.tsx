@@ -1,142 +1,17 @@
-import React, { useRef, useEffect } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  SkillBar,
+  // AnimatedCounter,
+  FloatingTechElement,
+  FeaturedProjectCard,
+  AchievementCard,
+} from "./components";
+import { expertise, achievements, featuredProjects } from "./data/about";
 
 gsap.registerPlugin(ScrollTrigger);
-
-// skill bar component
-const SkillBar = ({
-  skill,
-  percentage,
-  delay = 0,
-}: {
-  skill: string;
-  percentage: number;
-  delay?: number;
-}) => {
-  const barRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(barRef, { once: true, margin: "-50px" });
-
-  useEffect(() => {
-    if (isInView && barRef.current) {
-      gsap.to(barRef.current.querySelector(".skill-fill"), {
-        width: `${percentage}%`,
-        duration: 1.5,
-        delay: delay,
-        ease: "power2.out",
-      });
-    }
-  }, [isInView, percentage, delay]);
-
-  return (
-    <motion.div
-      ref={barRef}
-      className="space-y-2"
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay }}
-    >
-      <div className="flex justify-between items-center">
-        <span className="font-jetbrains text-sm font-medium text-gray-300">
-          {skill}
-        </span>
-        <span className="font-orbitron text-xs text-cyan-400 font-bold">
-          {percentage}%
-        </span>
-      </div>
-      <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-        <div
-          className="skill-fill h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full w-0"
-          style={{ width: 0 }}
-        />
-      </div>
-    </motion.div>
-  );
-};
-
-// const CircuitPattern = () => (
-//   <div className="absolute inset-0 opacity-5 pointer-events-none">
-//     <svg width="100%" height="100%" className="animate-pulse">
-//       <defs>
-//         <pattern
-//           id="circuit"
-//           patternUnits="userSpaceOnUse"
-//           width="100"
-//           height="100"
-//         >
-//           <path
-//             d="M10,10 L90,10 L90,90 L10,90 Z"
-//             fill="none"
-//             stroke="currentColor"
-//             strokeWidth="1"
-//           />
-//           <circle cx="10" cy="10" r="2" fill="currentColor" />
-//           <circle cx="90" cy="90" r="2" fill="currentColor" />
-//         </pattern>
-//       </defs>
-//       <rect width="100%" height="100%" fill="url(#circuit)" />
-//     </svg>
-//   </div>
-// );
-// Animated counter component
-const AnimatedCounter = ({
-  end,
-  suffix = "",
-  duration = 2,
-}: {
-  end: number;
-  suffix?: string;
-  duration?: number;
-}) => {
-  const counterRef = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(counterRef, { once: true });
-
-  useEffect(() => {
-    if (isInView && counterRef.current) {
-      gsap.to(counterRef.current, {
-        textContent: end,
-        duration,
-        ease: "power2.out",
-        snap: { textContent: 1 },
-        onUpdate: function () {
-          if (counterRef.current) {
-            counterRef.current.textContent =
-              Math.ceil(this.targets()[0].textContent) + suffix;
-          }
-        },
-      });
-    }
-  }, [isInView, end, suffix, duration]);
-
-  return <span ref={counterRef}>0{suffix}</span>;
-};
-
-// Floating tech elements
-const FloatingTechElement = ({
-  children,
-  className = "",
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-}) => (
-  <motion.div
-    className={`absolute ${className}`}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.1, scale: 1 }}
-    transition={{
-      delay,
-      duration: 0.8,
-      repeat: Infinity,
-      repeatType: "reverse",
-      repeatDelay: 3 + Math.random() * 2,
-    }}
-  >
-    {children}
-  </motion.div>
-);
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -147,42 +22,6 @@ export default function About() {
 
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "-10%"]);
-
-  const expertise = [
-    { skill: "React.js / Next.js", percentage: 95 },
-    { skill: "TypeScript / JavaScript", percentage: 92 },
-    { skill: "Embedded Systems (Arduino/IoT)", percentage: 88 },
-    { skill: "Blockchain Development", percentage: 85 },
-    { skill: "Machine Learning (GNN/ANN)", percentage: 82 },
-    { skill: "Hardware-Software Integration", percentage: 90 },
-  ];
-
-  const achievements = [
-    {
-      number: 5,
-      suffix: "+",
-      label: "Years Experience",
-      description: "Frontend Development",
-    },
-    {
-      number: 2500,
-      suffix: "",
-      label: "TPS Achieved",
-      description: "Blockchain IoT Network",
-    },
-    {
-      number: 15,
-      suffix: "+",
-      label: "Projects Delivered",
-      description: "Full-Stack Solutions",
-    },
-    {
-      number: 95,
-      suffix: "%",
-      label: "Energy Reduction",
-      description: "IoT Optimization",
-    },
-  ];
 
   return (
     <section
@@ -335,65 +174,15 @@ export default function About() {
               <h3 className="font-orbitron text-xl lg:text-2xl font-bold text-white mb-6">
                 Featured Innovations
               </h3>
-
               <div className="space-y-4">
-                <motion.div
-                  className="flex items-start space-x-4"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 1.0, duration: 0.5 }}
-                >
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full mt-2 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-jetbrains text-cyan-400 font-semibold text-sm uppercase tracking-wide">
-                      Blockchain IoT Framework
-                    </h4>
-                    <p className="font-inter text-gray-300 text-sm leading-relaxed">
-                      Developed a secure, scalable architecture using ZK-Rollups
-                      and Verkle Trees, achieving 99.7% uptime during DDoS
-                      attacks
-                    </p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className="flex items-start space-x-4"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 1.2, duration: 0.5 }}
-                >
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-jetbrains text-purple-400 font-semibold text-sm uppercase tracking-wide">
-                      AI-Powered Warehouse System
-                    </h4>
-                    <p className="font-inter text-gray-300 text-sm leading-relaxed">
-                      Built GNN-optimized inventory management reducing worker
-                      travel time and handling risk for fragile items
-                    </p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className="flex items-start space-x-4"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 1.4, duration: 0.5 }}
-                >
-                  <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-jetbrains text-green-400 font-semibold text-sm uppercase tracking-wide">
-                      Autonomous Service Robot
-                    </h4>
-                    <p className="font-inter text-gray-300 text-sm leading-relaxed">
-                      Created multi-functional coffee delivery bot with human
-                      following, obstacle avoidance, and mobile app control
-                    </p>
-                  </div>
-                </motion.div>
+                {featuredProjects.map((project) => (
+                  <FeaturedProjectCard
+                    key={project.title}
+                    color={project.color}
+                    title={project.title}
+                    description={project.description}
+                  />
+                ))}
               </div>
             </motion.div>
           </motion.div>
@@ -417,7 +206,6 @@ export default function About() {
               >
                 Technical Expertise
               </motion.h3>
-
               <div className="space-y-6">
                 {expertise.map((item, index) => (
                   <SkillBar
@@ -433,30 +221,15 @@ export default function About() {
             {/* Achievements Grid */}
             <div className="grid grid-cols-2 gap-4">
               {achievements.map((achievement, index) => (
-                <motion.div
+                <AchievementCard
                   key={achievement.label}
-                  className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm rounded-lg p-4 lg:p-6 border border-gray-700/40 text-center"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4 + index * 0.1, duration: 0.6 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="font-orbitron text-2xl lg:text-3xl font-bold text-cyan-400 mb-2">
-                    <AnimatedCounter
-                      end={achievement.number}
-                      suffix={achievement.suffix}
-                      duration={2 + index * 0.2}
-                    />
-                  </div>
-                  <div className="font-jetbrains text-xs lg:text-sm font-semibold text-white uppercase tracking-wide mb-1">
-                    {achievement.label}
-                  </div>
-                  <div className="font-inter text-xs text-gray-400">
-                    {achievement.description}
-                  </div>
-                </motion.div>
+                  number={achievement.number}
+                  suffix={achievement.suffix}
+                  label={achievement.label}
+                  description={achievement.description}
+                  duration={2 + index * 0.2}
+                  delay={0.4 + index * 0.1}
+                />
               ))}
             </div>
 
@@ -476,7 +249,6 @@ export default function About() {
                   My Philosophy
                 </h3>
               </div>
-
               <blockquote className="font-inter text-base lg:text-lg text-gray-300 leading-relaxed italic">
                 &quot;The future belongs to systems that seamlessly integrate
                 the digital and physical worlds. Every line of code I write and
@@ -520,7 +292,10 @@ export default function About() {
               aria-label="View my technical projects and case studies"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <span className="relative z-10 flex items-center justify-center space-x-2">
+              <a
+                className="relative z-10 flex items-center justify-center space-x-2"
+                href="#projects"
+              >
                 <span>View My Projects</span>
                 <svg
                   className="w-4 h-4 group-hover:translate-x-1 transition-transform"
@@ -534,7 +309,7 @@ export default function About() {
                     clipRule="evenodd"
                   />
                 </svg>
-              </span>
+              </a>
             </motion.button>
 
             <motion.button
@@ -543,7 +318,10 @@ export default function About() {
               whileTap={{ scale: 0.98 }}
               aria-label="Get in touch for collaboration opportunities"
             >
-              <span className="flex items-center justify-center space-x-2">
+              <a
+                className="flex items-center justify-center space-x-2"
+                href="#contact"
+              >
                 <span>Let&apos;s Connect</span>
                 <svg
                   className="w-4 h-4 group-hover:scale-110 transition-transform"
@@ -557,12 +335,11 @@ export default function About() {
                     clipRule="evenodd"
                   />
                 </svg>
-              </span>
+              </a>
             </motion.button>
           </motion.div>
         </motion.div>
       </motion.div>
-      {/* <CircuitPattern /> */}
     </section>
   );
 }

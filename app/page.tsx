@@ -1,53 +1,39 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+// import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import Hero from "@/app/components/sections/hero";
-// import About from "@/app/components/sections/about";
-// import FrontendSection from "@/components/sections/frontend";
-// import CommunicationsSection from "@/components/sections/communications";
-// import EmbeddedSection from "@/components/sections/embedded";
-// import ProjectsSection from "@/components/sections/projects";
-// import ExperienceSection from "@/components/sections/experience";
-// import ContactSection from "@/components/sections/contact";
-// import Navigation from "@/app/components/layout/Navigation";
 import LoadingScreen from "@/app/components/ui/LoadingScreen";
 import ScrollProgress from "@/app/components/ui/ScrollProgress";
-// import Skills from "./components/sections/skills";
+import About from "./components/sections/about";
+import Skills from "./components/sections/skills";
+import Projects from "./components/sections/projects";
+import Experience from "./components/sections/experience";
+import Contact from "./components/sections/contact";
 
-const About = dynamic(() => import("@/app/components/sections/about"), {
-  ssr: false,
-});
-const Skills = dynamic(() => import("@/app/components/sections/skills"), {
-  ssr: false,
-});
-const Projects = dynamic(() => import("@/app/components/sections/projects"), {
-  ssr: false,
-});
-const Experience = dynamic(
-  () => import("@/app/components/sections/experience"),
-  {
-    ssr: false,
-  }
-);
+// const About = dynamic(() => import("@/app/components/sections/about"), {
+//   ssr: false,
+// });
+// const Skills = dynamic(() => import("@/app/components/sections/skills"), {
+//   ssr: false,
+// });
+// const Projects = dynamic(() => import("@/app/components/sections/projects"), {
+//   ssr: false,
+// });
+// const Experience = dynamic(
+//   () => import("@/app/components/sections/experience"),
+//   {
+//     ssr: false,
+//   }
+// );
+// const Contact = dynamic(() => import("@/app/components/sections/contact"), {
+//   ssr: false,
+// });
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
-
-  // const sections = [
-  //   "hero",
-  //   "about",
-  //   "frontend",
-  //   "communications",
-  //   "embedded",
-  //   "projects",
-  //   "experience",
-  //   "contact",
-  // ];
-
-  // const activeSection = useScrollSpy(sections);
 
   useEffect(() => {
     setMounted(true);
@@ -74,58 +60,17 @@ export default function Home() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            {/* <BackgroundEffects /> */}
             <ScrollProgress />
             {/* <Navigation activeSection={activeSection} /> */}
 
             <div className="relative">
               <Hero />
 
-              <Suspense fallback={<div>Loading...</div>}>
-                <div>
-                  <About />
-                </div>
-              </Suspense>
-              <Suspense fallback={<div>Loading...</div>}>
-                <div>
-                  <Skills />
-                </div>
-              </Suspense>
-
-              <Suspense fallback={<div>Loading...</div>}>
-                <div>
-                  <Projects />
-                </div>
-              </Suspense>
-              <Suspense fallback={<div>Loading...</div>}>
-                <div>
-                  <Experience />
-                </div>
-              </Suspense>
-
-              {/* <section id="frontend">
-                <FrontendSection />
-              </section>
-
-              <section id="communications">
-                <CommunicationsSection />
-              </section>
-
-              <section id="embedded">
-                <EmbeddedSection />
-              </section>
-
-              <section id="projects">
-                <ProjectsSection />
-              </section>
-
-              <section id="experience">
-                <ExperienceSection />
-              </section>
-
-              <section id="contact">
-                <ContactSection />
-              </section> */}
+              <About />
+              <Skills />
+              <Projects />
+              <Experience />
+              <Contact />
             </div>
           </motion.div>
         )}

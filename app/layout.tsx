@@ -9,6 +9,7 @@ import {
   Space_Grotesk,
   Orbitron,
 } from "next/font/google";
+import ScrollProgress from "./components/ui/ScrollProgress";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -84,7 +85,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable}  ${orbitron.variable}`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable}  ${orbitron.variable} bg-gradient-to-br from-gray-900 via-black to-gray-800`}
       suppressHydrationWarning
     >
       <head>
@@ -127,8 +128,8 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased text-blueprint-text overflow-x-hidden">
-        {/* <div className="fixed inset-0 bg-blueprint-grid bg-blueprint-grid opacity-30 pointer-events-none" /> */}
+      <body className="relative font-sans antialiased overflow-x-hidden min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
+        <ScrollProgress />
         <div className="relative z-10">{children}</div>
         {/* <Analytics />
         <SpeedInsights /> */}
