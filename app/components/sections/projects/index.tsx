@@ -739,15 +739,16 @@ export default function Projects() {
     return activeFilter === "All"
       ? projects
       : projects.filter((project) => project.category === activeFilter);
-  }, [activeFilter, projects]);
+  }, [activeFilter]);
 
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
     <section
+      id="projects"
       ref={sectionRef}
-      className="relative py-20 lg:py-32 overflow-hidden"
+      className="relative py-20 lg:py-32 bg-gradient-to-b from-gray-800 via-gray-900 to-black overflow-hidden"
       role="main"
       aria-labelledby="projects-heading"
     >

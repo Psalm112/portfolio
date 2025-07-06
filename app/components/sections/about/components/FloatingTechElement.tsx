@@ -14,15 +14,18 @@ const FloatingTechElement: React.FC<FloatingTechElementProps> = ({
 }) => (
   <motion.div
     className={`absolute ${className}`}
-    style={{ willChange: "transform, opacity" }}
     initial={{ opacity: 0, scale: 0 }}
     animate={{ opacity: 0.1, scale: 1 }}
     transition={{
       delay,
-      duration: 0.8,
+      duration: 0.6,
       repeat: Infinity,
       repeatType: "reverse",
       repeatDelay: 3 + Math.random() * 2,
+    }}
+    style={{
+      willChange: "opacity, transform",
+      pointerEvents: "none",
     }}
   >
     {children}

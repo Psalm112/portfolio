@@ -19,7 +19,8 @@ export default function Experience() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-20 lg:py-32 overflow-hidden"
+      id="experience"
+      className="relative py-20 lg:py-32 bg-gradient-to-b from-black via-gray-900 to-gray-800 overflow-hidden"
       role="main"
       aria-labelledby="experience-heading"
     >

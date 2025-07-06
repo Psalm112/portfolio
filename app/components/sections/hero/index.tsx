@@ -98,7 +98,10 @@ function ParticleField() {
   const { viewport } = useThree();
 
   const particleData = useMemo(() => {
-    const count = Math.min(800, Math.floor(viewport.width * 100));
+    const isMobile = window.innerWidth < 768;
+    const baseCount = isMobile ? 300 : 600;
+    // const count = Math.min(800, Math.floor(viewport.width * 100));
+    const count = Math.min(baseCount, Math.floor(viewport.width * 50));
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
 

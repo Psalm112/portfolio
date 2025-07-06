@@ -1,35 +1,57 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import dynamic from "next/dynamic";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
-import Hero from "@/app/components/sections/hero";
+// import Hero from "@/app/components/sections/hero";
 import LoadingScreen from "@/app/components/ui/LoadingScreen";
 import ScrollProgress from "@/app/components/ui/ScrollProgress";
-import About from "./components/sections/about";
-import Skills from "./components/sections/skills";
-import Projects from "./components/sections/projects";
-import Experience from "./components/sections/experience";
-import Contact from "./components/sections/contact";
+// import About from "./components/sections/about";
+// import Skills from "./components/sections/skills";
+// import Projects from "./components/sections/projects";
+// import Experience from "./components/sections/experience";
+// import Contact from "./components/sections/contact";
 
-// const About = dynamic(() => import("@/app/components/sections/about"), {
-//   ssr: false,
-// });
-// const Skills = dynamic(() => import("@/app/components/sections/skills"), {
-//   ssr: false,
-// });
-// const Projects = dynamic(() => import("@/app/components/sections/projects"), {
-//   ssr: false,
-// });
-// const Experience = dynamic(
-//   () => import("@/app/components/sections/experience"),
-//   {
-//     ssr: false,
-//   }
-// );
-// const Contact = dynamic(() => import("@/app/components/sections/contact"), {
-//   ssr: false,
-// });
+const Hero = dynamic(() => import("@/app/components/sections/hero"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800" />
+  ),
+});
+
+const About = dynamic(() => import("@/app/components/sections/about"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black" />
+  ),
+});
+const Skills = dynamic(() => import("@/app/components/sections/skills"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-screen bg-gradient-to-b from-black via-gray-900 to-gray-800 " />
+  ),
+});
+const Projects = dynamic(() => import("@/app/components/sections/projects"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-screen bg-gradient-to-b from-gray-800 via-gray-900 to-black " />
+  ),
+});
+const Experience = dynamic(
+  () => import("@/app/components/sections/experience"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-screen bg-gradient-to-b from-black via-gray-900 to-gray-800 " />
+    ),
+  }
+);
+const Contact = dynamic(() => import("@/app/components/sections/contact"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-screen bg-gradient-to-b from-gray-800 via-gray-900 to-black" />
+  ),
+});
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);

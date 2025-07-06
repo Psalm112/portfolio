@@ -109,6 +109,13 @@ export default function RootLayout({
           `,
           }}
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -116,6 +123,11 @@ export default function RootLayout({
               document.documentElement.style.backgroundColor = '#0f172a';
               document.documentElement.style.backgroundImage = 'linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%)';
               document.documentElement.style.backgroundAttachment = 'fixed';
+              
+              // Smooth scroll polyfill
+              import('smoothscroll-polyfill').then((smoothscroll) => {
+                smoothscroll.polyfill();
+              });
               
               // Global WebGL context loss handler
               window.addEventListener('webglcontextlost', function(event) {

@@ -38,10 +38,10 @@
   }
   
 
-  .bg-white { background-color: white !important; }
+  /* .bg-white { background-color: white !important; }
   .bg-black { background-color: black !important; }
   .bg-gray-900 { background-color: #111827 !important; }
-  .bg-gray-800 { background-color: #1f2937 !important; }
+  .bg-gray-800 { background-color: #1f2937 !important; } */
   
   /* Hide all scrollbars */
   ::-webkit-scrollbar {

@@ -17,8 +17,10 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   const isInView = useInView(counterRef, { once: true });
 
   useEffect(() => {
+    let animation: gsap.core.Tween;
+
     if (isInView && counterRef.current) {
-      gsap.to(counterRef.current, {
+      animation = gsap.to(counterRef.current, {
         textContent: end,
         duration,
         ease: "power2.out",
@@ -31,6 +33,10 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
         },
       });
     }
+
+    return () => {
+      if (animation) animation.kill();
+    };
   }, [isInView, end, suffix, duration]);
 
   return <span ref={counterRef}>0{suffix}</span>;
