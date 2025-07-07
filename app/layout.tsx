@@ -6,8 +6,8 @@ import {
   Space_Grotesk,
   Orbitron,
 } from "next/font/google";
-import ScrollProgress from "./components/ui/ScrollProgress";
-import PerformanceMonitor from "./components/ui/PerformanceMonitor";
+// import ScrollProgress from "./components/ui/ScrollProgress";
+// import PerformanceMonitor from "./components/ui/PerformanceMonitor";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -183,8 +183,8 @@ export default function RootLayout({
         />
       </head>
       <body className="relative font-sans antialiased overflow-x-hidden min-h-screen performance-optimized">
-        <ScrollProgress />
-        <PerformanceMonitor />
+        {/* <ScrollProgress /> */}
+        {/* <PerformanceMonitor /> */}
         <div className="relative z-10 min-h-screen">{children}</div>
       </body>
     </html>

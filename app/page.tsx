@@ -4,14 +4,13 @@ import { useEffect, useState, Suspense } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 // import Hero from "@/app/components/sections/hero";
-import ScrollProgress from "@/app/components/ui/ScrollProgress";
+// import ScrollProgress from "@/app/components/ui/ScrollProgress";
 // import About from "./components/sections/about";
 // import Skills from "./components/sections/skills";
 // import Projects from "./components/sections/projects";
 // import Experience from "./components/sections/experience";
 // import Contact from "./components/sections/contact";
 
-// Optimized dynamic imports with better loading states
 const Hero = dynamic(() => import("@/app/components/sections/hero"), {
   ssr: false,
   loading: () => (
@@ -100,57 +99,16 @@ export default function Home() {
             }}
             className="performance-optimized"
           >
-            <ScrollProgress />
+            {/* <ScrollProgress /> */}
             {/* <Navigation activeSection={activeSection} /> */}
 
             <div className="relative">
-              <Suspense
-                fallback={
-                  <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 animation-container" />
-                }
-              >
-                <Hero />
-              </Suspense>
-
-              <Suspense
-                fallback={
-                  <div className="h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black animation-container" />
-                }
-              >
-                <About />
-              </Suspense>
-
-              <Suspense
-                fallback={
-                  <div className="h-screen bg-gradient-to-b from-black via-gray-900 to-gray-800 animation-container" />
-                }
-              >
-                <Skills />
-              </Suspense>
-
-              <Suspense
-                fallback={
-                  <div className="h-screen bg-gradient-to-b from-gray-800 via-gray-900 to-black animation-container" />
-                }
-              >
-                <Projects />
-              </Suspense>
-
-              <Suspense
-                fallback={
-                  <div className="h-screen bg-gradient-to-b from-black via-gray-900 to-gray-800 animation-container" />
-                }
-              >
-                <Experience />
-              </Suspense>
-
-              <Suspense
-                fallback={
-                  <div className="h-screen bg-gradient-to-b from-gray-800 via-gray-900 to-black animation-container" />
-                }
-              >
-                <Contact />
-              </Suspense>
+              <Hero />
+              <About />
+              <Skills />
+              <Projects />
+              <Experience />
+              <Contact />
             </div>
           </motion.div>
         )}
