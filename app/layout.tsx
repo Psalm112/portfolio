@@ -7,12 +7,14 @@ import {
   Orbitron,
 } from "next/font/google";
 import ScrollProgress from "./components/ui/ScrollProgress";
+import PerformanceMonitor from "./components/ui/PerformanceMonitor";
 
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
+  preload: true,
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -20,6 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["300", "400", "500", "600"],
   variable: "--font-jetbrains",
   display: "swap",
+  preload: true,
 });
 
 const spaceGrotesk = Space_Grotesk({
@@ -27,6 +30,7 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-space-grotesk",
   display: "swap",
+  preload: true,
 });
 
 const orbitron = Orbitron({
@@ -34,6 +38,7 @@ const orbitron = Orbitron({
   weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-orbitron",
   display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -83,32 +88,8 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable} ${orbitron.variable}`}
       suppressHydrationWarning
-      style={{
-        backgroundColor: "#0f172a",
-        backgroundImage:
-          "linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%)",
-        backgroundAttachment: "fixed",
-        minHeight: "100vh",
-      }}
     >
       <head>
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-            html, body {
-              background-color: #0f172a !important;
-              background-image: linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%) !important;
-              background-attachment: fixed !important;
-              min-height: 100vh !important;
-            }
-            
-            .section-transition {
-              background: linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%);
-              background-attachment: fixed;
-            }
-          `,
-          }}
-        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -119,59 +100,92 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Prevent white flashes
-              document.documentElement.style.backgroundColor = '#0f172a';
-              document.documentElement.style.backgroundImage = 'linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%)';
-              document.documentElement.style.backgroundAttachment = 'fixed';
-              
-              // Smooth scroll polyfill
-              import('smoothscroll-polyfill').then((smoothscroll) => {
-                smoothscroll.polyfill();
-              });
-              
-              // Global WebGL context loss handler
-              window.addEventListener('webglcontextlost', function(event) {
-                console.warn('WebGL context lost globally, attempting recovery...');
-                event.preventDefault();
-                window.webglContextLost = true;
-                setTimeout(() => {
-                  window.webglContextLost = false;
-                  console.log('WebGL context recovery attempted');
-                }, 2000);
-              });
-              
-              // Prevent multiple rapid context losses
-              let contextLossCount = 0;
-              let lastContextLoss = 0;
-              
-              window.addEventListener('webglcontextlost', function(event) {
-                const now = Date.now();
-                if (now - lastContextLoss < 5000) {
-                  contextLossCount++;
-                } else {
-                  contextLossCount = 1;
-                }
-                lastContextLoss = now;
+              // Prevent white flashes and optimize initial load
+              (function() {
+                document.documentElement.style.backgroundColor = '#0f172a';
+                document.documentElement.style.backgroundImage = 'linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%)';
+                document.documentElement.style.backgroundAttachment = 'fixed';
                 
-                if (contextLossCount > 3) {
-                  console.error('Multiple WebGL context losses detected. Consider reducing graphics quality.');
+                // Optimize smooth scroll with better performance
+                if ('scrollBehavior' in document.documentElement.style) {
+                  document.documentElement.style.scrollBehavior = 'smooth';
+                } else {
+                  import('smoothscroll-polyfill').then((smoothscroll) => {
+                    smoothscroll.polyfill();
+                  }).catch(() => {
+                    // Fallback for smooth scroll
+                    const originalScrollTo = window.scrollTo;
+                    window.scrollTo = function(options) {
+                      if (options && options.behavior === 'smooth') {
+                        const target = options.top || 0;
+                        const start = window.pageYOffset;
+                        const distance = target - start;
+                        const duration = 800;
+                        let startTime = null;
+                        
+                        function animation(currentTime) {
+                          if (startTime === null) startTime = currentTime;
+                          const timeElapsed = currentTime - startTime;
+                          const run = ease(timeElapsed, start, distance, duration);
+                          window.scrollTo(0, run);
+                          if (timeElapsed < duration) requestAnimationFrame(animation);
+                        }
+                        
+                        function ease(t, b, c, d) {
+                          t /= d / 2;
+                          if (t < 1) return c / 2 * t * t + b;
+                          t--;
+                          return -c / 2 * (t * (t - 2) - 1) + b;
+                        }
+                        
+                        requestAnimationFrame(animation);
+                      } else {
+                        originalScrollTo.call(this, options);
+                      }
+                    };
+                  });
                 }
-              });
+                
+                // Optimized WebGL context management
+                let webglContextLost = false;
+                let contextLossCount = 0;
+                let lastContextLoss = 0;
+                
+                window.addEventListener('webglcontextlost', function(event) {
+                  event.preventDefault();
+                  webglContextLost = true;
+                  contextLossCount++;
+                  lastContextLoss = Date.now();
+                  
+                  if (contextLossCount > 3) {
+                    console.warn('Multiple WebGL context losses detected. Consider reducing graphics quality.');
+                  }
+                  
+                  setTimeout(() => {
+                    webglContextLost = false;
+                  }, 2000);
+                }, { passive: false });
+                
+                // Performance monitoring
+                if ('performance' in window) {
+                  window.addEventListener('load', function() {
+                    setTimeout(() => {
+                      const perfData = performance.getEntriesByType('navigation')[0];
+                      if (perfData && perfData.loadEventEnd - perfData.loadEventStart > 3000) {
+                        console.warn('Page load time is slow. Consider optimizing assets.');
+                      }
+                    }, 100);
+                  });
+                }
+              })();
             `,
           }}
         />
       </head>
-      <body
-        className="relative font-sans antialiased overflow-x-hidden min-h-screen force-bg performance-optimized"
-        style={{
-          backgroundColor: "#0f172a",
-          backgroundImage:
-            "linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%)",
-          backgroundAttachment: "fixed",
-        }}
-      >
+      <body className="relative font-sans antialiased overflow-x-hidden min-h-screen performance-optimized">
         <ScrollProgress />
-        <div className="relative z-10 force-bg min-h-screen">{children}</div>
+        <PerformanceMonitor />
+        <div className="relative z-10 min-h-screen">{children}</div>
       </body>
     </html>
   );

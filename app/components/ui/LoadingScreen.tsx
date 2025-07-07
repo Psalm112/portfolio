@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 
 const LoadingScreen = () => {
   const [progress, setProgress] = useState(0);
@@ -19,149 +19,122 @@ const LoadingScreen = () => {
     []
   );
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        const newProgress = prev + Math.random() * 15;
-        if (newProgress >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return newProgress;
-      });
-    }, 200);
-
-    return () => clearInterval(interval);
+  // Optimized progress update
+  const updateProgress = useCallback(() => {
+    setProgress((prev) => {
+      const newProgress = prev + Math.random() * 15;
+      return newProgress >= 100 ? 100 : newProgress;
+    });
   }, []);
 
+  // Optimized text update
+  const updateText = useCallback(() => {
+    setLoadingText((prev) => {
+      const currentIndex = loadingStages.indexOf(prev);
+      const nextIndex = (currentIndex + 1) % loadingStages.length;
+      return loadingStages[nextIndex];
+    });
+  }, [loadingStages]);
+
   useEffect(() => {
+    const progressInterval = setInterval(() => {
+      updateProgress();
+    }, 200);
+
     const textInterval = setInterval(() => {
-      setLoadingText((prev) => {
-        const currentIndex = loadingStages.indexOf(prev);
-        const nextIndex = (currentIndex + 1) % loadingStages.length;
-        return loadingStages[nextIndex];
-      });
+      updateText();
     }, 300);
 
-    return () => clearInterval(textInterval);
-  }, [loadingStages]);
+    return () => {
+      clearInterval(progressInterval);
+      clearInterval(textInterval);
+    };
+  }, [updateProgress, updateText]);
+
+  // Stop intervals when progress reaches 100%
+  useEffect(() => {
+    if (progress >= 100) {
+      // Cleanup will happen in the main useEffect
+    }
+  }, [progress]);
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center "
+      className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-800 performance-optimized"
+      initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="text-center space-y-8">
-        {/* Logo Animation */}
+      <div className="text-center space-y-8 p-8">
+        {/* Logo/Title */}
         <motion.div
-          className="relative"
-          initial={{ scale: 0.5, opacity: 0 }}
+          initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="space-y-4"
         >
-          <motion.svg
-            width="120"
-            height="120"
-            viewBox="0 0 120 120"
-            className="mx-auto"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-          >
-            <motion.circle
-              cx="60"
-              cy="60"
-              r="50"
-              fill="none"
-              stroke="#64b5f6"
-              strokeWidth="2"
-              strokeDasharray="314"
-              strokeDashoffset="314"
-              animate={{ strokeDashoffset: 0 }}
-              transition={{ duration: 2, ease: "easeInOut" }}
-            />
-            <motion.circle
-              cx="60"
-              cy="60"
-              r="35"
-              fill="none"
-              stroke="#81c784"
-              strokeWidth="2"
-              strokeDasharray="220"
-              strokeDashoffset="220"
-              animate={{ strokeDashoffset: 0 }}
-              transition={{ duration: 2, delay: 0.5, ease: "easeInOut" }}
-            />
-            <motion.circle
-              cx="60"
-              cy="60"
-              r="20"
-              fill="none"
-              stroke="#ffb74d"
-              strokeWidth="2"
-              strokeDasharray="126"
-              strokeDashoffset="126"
-              animate={{ strokeDashoffset: 0 }}
-              transition={{ duration: 2, delay: 1, ease: "easeInOut" }}
-            />
-            <motion.circle
-              cx="60"
-              cy="60"
-              r="5"
-              fill="#64b5f6"
-              animate={{ scale: [1, 1.5, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            />
-          </motion.svg>
+          <h1 className="text-4xl md:text-6xl font-orbitron font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+            Samuel Oyenuga
+          </h1>
+          <p className="text-lg md:text-xl text-gray-300 font-space-grotesk">
+            Multi-Disciplinary Engineer
+          </p>
         </motion.div>
 
         {/* Progress Bar */}
-        <div className="w-80 mx-auto space-y-4">
-          <div className="h-1 rounded-full overflow-hidden">
+        <div className="w-80 md:w-96 mx-auto space-y-4">
+          <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full"
-              style={{ width: `${Math.min(progress, 100)}%` }}
-              transition={{ duration: 0.3 }}
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
             />
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 via-blue-500/20 to-purple-600/20 blur-sm" />
           </div>
 
-          {/* Progress Text */}
-          <div className="flex justify-between text-sm font-mono">
+          <div className="flex justify-between text-sm text-gray-400">
+            <span>Loading...</span>
             <span>{Math.round(progress)}%</span>
-            <motion.span
-              key={loadingText}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              {loadingText}
-            </motion.span>
           </div>
         </div>
 
-        {/* Binary Rain Effect */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
-          {Array.from({ length: 50 }, (_, i) => (
+        {/* Loading Text */}
+        <motion.div
+          key={loadingText}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+          className="text-cyan-400 font-jetbrains text-sm md:text-base"
+        >
+          {loadingText}
+        </motion.div>
+
+        {/* Animated Dots */}
+        <motion.div
+          className="flex justify-center space-x-1"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          {[0, 1, 2].map((i) => (
             <motion.div
               key={i}
-              className="absolute font-mono text-xs"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `-20px`,
-              }}
+              className="w-2 h-2 bg-cyan-400 rounded-full"
               animate={{
-                y: window.innerHeight + 20,
+                scale: [1, 1.5, 1],
+                opacity: [0.5, 1, 0.5],
               }}
               transition={{
-                duration: Math.random() * 3 + 2,
+                duration: 1.5,
                 repeat: Infinity,
-                delay: Math.random() * 2,
+                delay: i * 0.2,
+                ease: "easeInOut",
               }}
-            >
-              {Math.random() > 0.5 ? "1" : "0"}
-            </motion.div>
+            />
           ))}
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   );
