@@ -474,7 +474,8 @@ export default function Experience() {
           </motion.p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <motion.button
+            <motion.a
+              href="#contact"
               className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 via-purple-500 to-green-500 rounded-lg font-orbitron font-semibold text-white shadow-lg overflow-hidden"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -500,9 +501,11 @@ export default function Experience() {
                   />
                 </svg>
               </span>
-            </motion.button>
+            </motion.a>
 
-            <motion.button
+            <motion.a
+              href="/assets/RESUME SAMUEL OYENUGA.pdf"
+              download
               className="group px-8 py-4 bg-transparent border-2 border-gray-600 hover:border-cyan-400 rounded-lg font-orbitron font-semibold text-gray-300 hover:text-cyan-400 transition-all duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -527,7 +530,7 @@ export default function Experience() {
                   />
                 </svg>
               </span>
-            </motion.button>
+            </motion.a>
           </div>
         </motion.div>
       </div>

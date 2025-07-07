@@ -410,7 +410,8 @@ export default function Skills() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-20 lg:py-32 overflow-hidden"
+      id="skills"
+      className="relative py-20 lg:py-32 bg-gradient-to-b from-black via-gray-900 to-gray-800 overflow-hidden"
       role="main"
       aria-labelledby="skills-heading"
     >
@@ -567,7 +568,8 @@ export default function Skills() {
             possible.
           </motion.p>
 
-          <motion.button
+          <motion.a
+            href="#projects"
             className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 via-purple-500 to-green-500 rounded-lg font-orbitron font-semibold text-white shadow-lg overflow-hidden"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
@@ -593,7 +595,7 @@ export default function Skills() {
                 />
               </svg>
             </span>
-          </motion.button>
+          </motion.a>
         </motion.div>
       </motion.div>
     </section>

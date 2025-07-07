@@ -420,7 +420,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0, duration: 0.6 }}
           >
-            <motion.button
+            <motion.a
+              href="#projects"
               className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron font-semibold text-white shadow-lg overflow-hidden"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -428,9 +429,11 @@ export default function Hero() {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <span className="relative z-10">Explore My Work</span>
-            </motion.button>
+            </motion.a>
 
-            <motion.button
+            <motion.a
+              href="/assets/RESUME SAMUEL OYENUGA.pdf"
+              download
               className="group px-8 py-4 border-2 border-gray-600 hover:border-cyan-400 rounded-lg font-orbitron font-semibold text-gray-300 hover:text-white transition-all duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -450,7 +453,7 @@ export default function Hero() {
                   />
                 </svg>
               </span>
-            </motion.button>
+            </motion.a>
           </motion.div>
         </motion.div>
 
@@ -520,7 +523,7 @@ export default function Hero() {
           />
         </motion.div>
         <p className="text-gray-500 text-xs mt-2 font-jetbrains">
-          Scroll to explore
+          Dive into the mainframe ⚡
         </p>
       </motion.div>
     </section>

@@ -663,7 +663,16 @@ const ProjectCard = ({
         </div>
 
         {/* Action Button */}
-        <motion.button
+        <motion.a
+          href={
+            // project.links.live ||
+            // project.links.demo ||
+            // project.links.github ||
+            // project.links.paper ||
+            "#"
+          }
+          target="_blank"
+          rel="noopener noreferrer"
           className={`w-full py-3 px-4 bg-gradient-to-r from-transparent to-transparent border-2 border-white/20 rounded-lg font-orbitron font-semibold text-white text-sm transition-all duration-300 hover:border-cyan-400/50 hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-blue-500/10 group`}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -686,7 +695,7 @@ const ProjectCard = ({
               />
             </svg>
           </span>
-        </motion.button>
+        </motion.a>
       </div>
     </motion.article>
   );
@@ -863,7 +872,10 @@ export default function Projects() {
             viewport={{ once: true }}
             transition={{ delay: 1.2, duration: 0.6 }}
           >
-            <motion.button
+            <motion.a
+              href="https://github.com/Psalm112"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg font-orbitron font-semibold text-white shadow-lg overflow-hidden"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -881,9 +893,10 @@ export default function Projects() {
                 </svg>
                 <span>View All Projects</span>
               </span>
-            </motion.button>
+            </motion.a>
 
-            <motion.button
+            <motion.a
+              href="#contact"
               className="group px-8 py-4 border-2 border-gray-600 rounded-lg font-orbitron font-semibold text-gray-300 hover:border-cyan-400 hover:text-white transition-all duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -904,7 +917,7 @@ export default function Projects() {
                   />
                 </svg>
               </span>
-            </motion.button>
+            </motion.a>
           </motion.div>
         </motion.div>
       </div>
