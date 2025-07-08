@@ -4,16 +4,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  FaBars,
-  FaXmark,
-  FaUser,
-  FaDiagramProject,
-  FaBriefcase,
-  FaEnvelope,
-} from "react-icons/fa6";
-import { IoMdCog } from "react-icons/io";
-import { FaHome } from "react-icons/fa";
+
+import { RiHome6Line, RiUser4Line } from "react-icons/ri";
+import { HiMiniCog, HiOutlineBriefcase } from "react-icons/hi2";
+import { PiEnvelopeDuotone } from "react-icons/pi";
+import { BsHddStack } from "react-icons/bs";
+import { TfiLayoutMenuSeparated } from "react-icons/tfi";
+import { IoIosClose } from "react-icons/io";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,63 +19,147 @@ interface NavigationProps {
 }
 
 const navItems = [
-  { id: "hero", label: "Home", icon: FaHome },
-  { id: "about", label: "About", icon: FaUser },
-  { id: "skills", label: "Skills", icon: IoMdCog },
-  { id: "projects", label: "Projects", icon: FaDiagramProject },
-  { id: "experience", label: "Experience", icon: FaBriefcase },
-  { id: "contact", label: "Contact", icon: FaEnvelope },
+  { id: "hero", label: "Home", icon: RiHome6Line },
+  { id: "about", label: "About", icon: RiUser4Line },
+  { id: "skills", label: "Skills", icon: HiMiniCog },
+  { id: "projects", label: "Projects", icon: BsHddStack },
+  { id: "experience", label: "Experience", icon: HiOutlineBriefcase },
+  { id: "contact", label: "Contact", icon: PiEnvelopeDuotone },
 ];
 
 const Navigation: React.FC<NavigationProps> = ({ activeSection }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const navRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Hide/show navigation on scroll
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        start: "top top",
-        onUpdate: (self) => {
-          const currentY = self.scroll();
-          setScrolled(currentY > 50);
-        },
-      });
-    });
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
 
-    return () => ctx.revert();
-  }, []);
+      if (currentScrollY < 100) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+        setIsOpen(false);
+      } else {
+        setIsVisible(true);
+      }
 
-  const scrollTo = (id: string) => {
-    const element = document.getElementById(id);
+      setLastScrollY(currentScrollY);
+    };
+
+    const throttledHandleScroll = () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(handleScroll, 16); // ~60fps
+    };
+
+    window.addEventListener("scroll", throttledHandleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", throttledHandleScroll);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [lastScrollY]);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({
+      const headerOffset = 80;
+      const elementPosition = element.offsetTop;
+      const offsetPosition = elementPosition - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
         behavior: "smooth",
-        block: "start",
-        inline: "nearest",
       });
     }
     setIsOpen(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+  const handleKeyDown = (e: React.KeyboardEvent, sectionId: string) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      scrollTo(id);
+      scrollToSection(sectionId);
     }
   };
 
   return (
     <>
-      {/* Floating Action Button */}
+      {/* Desktop Navigation */}
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{
+          y: isVisible ? 0 : -100,
+          opacity: isVisible ? 1 : 0,
+        }}
+        transition={{
+          duration: 0.3,
+          ease: "easeInOut",
+          type: "spring",
+          damping: 20,
+        }}
+        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block"
+        role="navigation"
+        aria-label="Main navigation"
+      >
+        <div className="bg-gray-900/80 backdrop-blur-xl border border-gray-700/50 rounded-full px-6 py-3 shadow-2xl">
+          <div className="flex items-center space-x-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeSection === item.id;
+
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  onKeyDown={(e) => handleKeyDown(e, item.id)}
+                  className={`relative group flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm
+                    ${
+                      isActive
+                        ? "text-cyan-400 bg-cyan-400/10"
+                        : "text-gray-400 hover:text-white hover:bg-gray-800/50"
+                    }
+                    focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:ring-offset-2 focus:ring-offset-gray-900`}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span className="font-inter hidden lg:block">
+                    {item.label}
+                  </span>
+
+                  {/* Active indicator */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeIndicator"
+                      className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-blue-400/10 rounded-full border border-cyan-400/30"
+                      transition={{
+                        type: "spring",
+                        bounce: 0.2,
+                        duration: 0.6,
+                      }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </motion.nav>
+
+      {/* Mobile Navigation Toggle */}
       <motion.button
-        className={`fixed top-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/25 flex items-center justify-center transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/40 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 ${
-          scrolled ? "backdrop-blur-lg bg-opacity-90" : ""
-        }`}
+        initial={{ scale: 0 }}
+        animate={{ scale: isVisible ? 1 : 0 }}
+        transition={{ duration: 0.2 }}
         onClick={() => setIsOpen(!isOpen)}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        className="fixed top-6 right-6 z-50 w-12 h-12 rounded-full bg-gray-900/80 backdrop-blur-xl border border-gray-700/50 flex items-center justify-center shadow-lg md:hidden
+          focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:ring-offset-2 focus:ring-offset-gray-900"
         aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
         aria-expanded={isOpen}
       >
@@ -91,7 +172,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeSection }) => {
               exit={{ rotate: 90, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <FaXmark size={20} className="text-white" />
+              <IoIosClose className="w-5 h-5 text-white" />
             </motion.div>
           ) : (
             <motion.div
@@ -101,13 +182,13 @@ const Navigation: React.FC<NavigationProps> = ({ activeSection }) => {
               exit={{ rotate: -90, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <FaBars size={20} className="text-white" />
+              <TfiLayoutMenuSeparated className="w-5 h-5 text-white" />
             </motion.div>
           )}
         </AnimatePresence>
       </motion.button>
 
-      {/* Side Panel Navigation */}
+      {/* Mobile Navigation Menu */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -116,36 +197,36 @@ const Navigation: React.FC<NavigationProps> = ({ activeSection }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
               onClick={() => setIsOpen(false)}
             />
 
-            {/* Navigation Panel */}
-            <motion.nav
+            {/* Mobile Menu */}
+            <motion.div
               ref={navRef}
-              initial={{ x: 400, opacity: 0 }}
+              initial={{ x: "100%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 400, opacity: 0 }}
+              exit={{ x: "100%", opacity: 0 }}
               transition={{
                 type: "spring",
-                stiffness: 300,
-                damping: 30,
-                duration: 0.4,
+                damping: 25,
+                stiffness: 200,
+                duration: 0.3,
               }}
-              className="fixed right-0 top-0 h-full w-80 bg-gray-900/95 backdrop-blur-xl border-l border-gray-700/50 z-45 shadow-2xl"
-              role="navigation"
-              aria-label="Main navigation"
+              className="fixed right-0 top-0 h-full w-80 max-w-[80vw] bg-gray-900/95 backdrop-blur-xl border-l border-gray-700/50 z-45 shadow-2xl md:hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile navigation menu"
             >
               {/* Header */}
-              <div className="p-6 border-b border-gray-700/50">
+              <div className="p-6 border-b border-gray-700/30">
                 <motion.div
-                  initial={{ y: -20, opacity: 0 }}
+                  initial={{ y: -10, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                  className="text-center"
+                  transition={{ delay: 0.1 }}
                 >
-                  <h2 className="text-xl font-orbitron font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  <h2 className="text-lg font-orbitron font-bold text-white">
                     Samuel Oyenuga
                   </h2>
                   <p className="text-sm text-gray-400 font-inter mt-1">
@@ -155,114 +236,50 @@ const Navigation: React.FC<NavigationProps> = ({ activeSection }) => {
               </div>
 
               {/* Navigation Items */}
-              <div className="flex flex-col py-6 space-y-2">
+              <nav className="py-4">
                 {navItems.map((item, index) => {
                   const Icon = item.icon;
                   const isActive = activeSection === item.id;
-                  const isHovered = hoveredItem === item.id;
 
                   return (
                     <motion.button
                       key={item.id}
-                      onClick={() => scrollTo(item.id)}
+                      onClick={() => scrollToSection(item.id)}
                       onKeyDown={(e) => handleKeyDown(e, item.id)}
-                      onMouseEnter={() => setHoveredItem(item.id)}
-                      onMouseLeave={() => setHoveredItem(null)}
                       initial={{ x: 50, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
-                      transition={{
-                        delay: index * 0.1 + 0.3,
-                        duration: 0.4,
-                        type: "spring",
-                        stiffness: 200,
-                      }}
-                      className={`relative group flex items-center space-x-4 px-6 py-4 mx-4 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 ${
-                        isActive
-                          ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 shadow-lg shadow-cyan-500/10"
-                          : "text-gray-300 hover:text-white hover:bg-gray-800/50"
-                      }`}
-                    >
-                      {/* Active Indicator */}
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeIndicator"
-                          className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-r-full"
-                          transition={{
-                            type: "spring",
-                            stiffness: 300,
-                            damping: 30,
-                          }}
-                        />
-                      )}
-
-                      {/* Icon */}
-                      <motion.div
-                        animate={{
-                          scale: isHovered ? 1.1 : 1,
-                          rotate: isHovered ? 5 : 0,
-                        }}
-                        transition={{ duration: 0.2 }}
-                        className={`text-lg ${
+                      transition={{ delay: index * 0.05 + 0.15 }}
+                      className={`w-full flex items-center space-x-4 px-6 py-4 text-left transition-all duration-300
+                        ${
                           isActive
-                            ? "text-cyan-400"
-                            : "text-gray-400 group-hover:text-cyan-300"
-                        }`}
-                      >
-                        <Icon />
-                      </motion.div>
-
-                      {/* Label */}
-                      <span className="font-space-grotesk font-medium">
+                            ? "bg-gradient-to-r from-cyan-400/10 to-blue-400/10 text-cyan-400 border-r-2 border-cyan-400"
+                            : "text-gray-300 hover:text-white hover:bg-gray-800/30"
+                        }
+                        focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:ring-inset`}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span className="font-inter font-medium">
                         {item.label}
                       </span>
-
-                      {/* Hover Effect */}
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        initial={false}
-                        animate={{
-                          opacity: isHovered ? 1 : 0,
-                        }}
-                      />
                     </motion.button>
                   );
                 })}
-              </div>
+              </nav>
 
               {/* Footer */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-700/50">
+              <div className="absolute bottom-6 left-6 right-6 text-center">
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.8, duration: 0.5 }}
-                  className="text-center space-y-2"
+                  transition={{ delay: 0.4 }}
                 >
                   <p className="text-xs text-gray-500 font-jetbrains">
                     Bridging Hardware & Software
                   </p>
-                  <div className="flex justify-center space-x-1">
-                    {["⚡", "🌐", "🧠"].map((emoji, index) => (
-                      <motion.span
-                        key={index}
-                        className="text-sm"
-                        animate={{
-                          y: [0, -5, 0],
-                          opacity: [0.5, 1, 0.5],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          delay: index * 0.3,
-                          ease: "easeInOut",
-                        }}
-                      >
-                        {emoji}
-                      </motion.span>
-                    ))}
-                  </div>
                 </motion.div>
               </div>
-            </motion.nav>
+            </motion.div>
           </>
         )}
       </AnimatePresence>
