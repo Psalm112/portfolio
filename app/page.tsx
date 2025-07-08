@@ -68,7 +68,7 @@ const Contact = dynamic(() => import("@/app/components/sections/contact"), {
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
-  const [activeSection] = useState("hero");
+  // const [activeSection] = useState("hero");
 
   useEffect(() => {
     setMounted(true);
