@@ -24,7 +24,7 @@ export interface EducationItem {
   field: string;
   period: string;
   location: string;
-  cgpa: string;
+  // cgpa: string;
   achievements: string[];
   relevantCourses: string[];
   color: string;
@@ -191,14 +191,14 @@ export const education: EducationItem = {
   field: "Information and Communication Technology",
   period: "2019 – 2024",
   location: "Akure, Nigeria",
-  cgpa: "4.27/5.00",
+  // cgpa: "4.27/5.00",
   achievements: [
-    "Graduated with First Class Honors (CGPA: 4.27/5.00)",
-    "Led multiple award-winning final year projects in AI and Blockchain",
+    // "Graduated with First Class Honors (CGPA: 4.27/5.00)",
+    "final year projects in AI and Blockchain",
     "Published research on blockchain-based IoT security frameworks",
     "Developed warehouse management system using Graph Neural Networks",
     "Created autonomous coffee delivery robot with advanced navigation",
-    "Presented research at international conferences on emerging technologies",
+    // "Presented research at international conferences on emerging technologies",
     "Mentored junior students in embedded systems and software development",
   ],
   relevantCourses: [

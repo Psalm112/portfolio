@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
+import LoadingScreen from "@/app/components/ui/LoadingScreen";
+// import Navigation from "./components/layout/Navigation";
 // import Hero from "@/app/components/sections/hero";
 // import ScrollProgress from "@/app/components/ui/ScrollProgress";
 // import About from "./components/sections/about";
@@ -56,17 +58,17 @@ const Contact = dynamic(() => import("@/app/components/sections/contact"), {
   ),
 });
 
-// Optimized loading screen component
-const OptimizedLoadingScreen = dynamic(
-  () => import("@/app/components/ui/LoadingScreen"),
-  {
-    ssr: false,
-  }
-);
+// const LoadingScreen = dynamic(
+//   () => import("@/app/components/ui/LoadingScreen"),
+//   {
+//     ssr: false,
+//   }
+// );
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [activeSection] = useState("hero");
 
   useEffect(() => {
     setMounted(true);
@@ -84,7 +86,7 @@ export default function Home() {
   return (
     <main className="relative min-h-screen performance-optimized">
       <AnimatePresence mode="wait">
-        {isLoading && <OptimizedLoadingScreen key="loading" />}
+        {isLoading && <LoadingScreen key="loading" />}
       </AnimatePresence>
 
       <AnimatePresence>

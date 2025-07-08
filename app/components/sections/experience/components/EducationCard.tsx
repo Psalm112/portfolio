@@ -87,7 +87,7 @@ const EducationCard = ({
                 </svg>
                 <span className="font-jetbrains">{education.location}</span>
               </div>
-              <div className="flex items-center gap-1">
+              {/* <div className="flex items-center gap-1">
                 <svg
                   className="w-4 h-4"
                   fill="currentColor"
@@ -100,7 +100,7 @@ const EducationCard = ({
                   />
                 </svg>
                 <span className="font-jetbrains">CGPA: {education.cgpa}</span>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
