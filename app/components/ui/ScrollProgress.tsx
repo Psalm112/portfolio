@@ -4,26 +4,40 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 
 const ScrollProgress: React.FC = () => {
   const progressRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const rafRef = useRef<number | null>(null);
 
   const updateProgress = useCallback(() => {
-    if (!progressRef.current) return;
-
     const scrollTop = window.pageYOffset;
-    const documentHeight =
-      document.documentElement.scrollHeight - window.innerHeight;
-    const progress = Math.max(0, Math.min(scrollTop / documentHeight, 1));
+    const documentHeight = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.clientHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    );
+    const windowHeight = window.innerHeight;
+    const scrollableHeight = documentHeight - windowHeight;
+
+    if (scrollableHeight <= 0) return;
+
+    const progress = Math.max(0, Math.min(scrollTop / scrollableHeight, 1));
 
     setScrollProgress(progress);
-    setIsVisible(scrollTop > 100);
+    setIsVisible(scrollTop > 50);
 
     // Update progress bar with hardware acceleration
-    progressRef.current.style.transform = `translateX(${
-      (progress - 1) * 100
-    }%)`;
-  }, []);
+    if (progressRef.current) {
+      progressRef.current.style.transform = `scaleX(${progress})`;
+    }
+
+    if (glowRef.current) {
+      glowRef.current.style.transform = `scaleX(${progress})`;
+      glowRef.current.style.opacity = isVisible ? "0.6" : "0";
+    }
+  }, [isVisible]);
 
   const handleScroll = useCallback(() => {
     if (rafRef.current) {
@@ -33,7 +47,10 @@ const ScrollProgress: React.FC = () => {
   }, [updateProgress]);
 
   useEffect(() => {
+    // Initial calculation
     updateProgress();
+
+    // Add event listeners
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll, { passive: true });
 
@@ -48,7 +65,7 @@ const ScrollProgress: React.FC = () => {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 h-1 bg-black/20 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+      className={`fixed top-0 left-0 right-0 h-1 bg-transparent z-[60] transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       role="progressbar"
@@ -57,25 +74,30 @@ const ScrollProgress: React.FC = () => {
       aria-valuemin={0}
       aria-valuemax={100}
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-purple-500/20" />
+      {/* Background track */}
+      <div className="absolute inset-0 bg-gray-900/30 backdrop-blur-sm" />
 
       {/* Progress bar */}
       <div
         ref={progressRef}
-        className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 shadow-lg transform translate-x-[-100%] will-change-transform"
+        className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 shadow-lg transform-gpu origin-left"
         style={{
+          transform: `scaleX(${scrollProgress})`,
           transformOrigin: "left center",
           backfaceVisibility: "hidden",
-          perspective: "1000px",
+          willChange: "transform",
         }}
       />
 
       {/* Glow effect */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-cyan-400/50 via-blue-500/50 to-purple-500/50 blur-sm transform translate-x-[-100%] will-change-transform"
+        ref={glowRef}
+        className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-400/60 via-blue-500/60 to-purple-500/60 blur-sm transform-gpu origin-left"
         style={{
-          transform: `translateX(${(scrollProgress - 1) * 100}%)`,
+          transform: `scaleX(${scrollProgress})`,
+          transformOrigin: "left center",
+          backfaceVisibility: "hidden",
+          willChange: "transform, opacity",
           opacity: isVisible ? 0.6 : 0,
         }}
       />

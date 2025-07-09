@@ -579,7 +579,7 @@ export default function Skills() {
             transition={{ delay: 0.9, duration: 0.6 }}
             aria-label="View detailed project implementations"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-purple-400 to-green-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="w-full absolute inset-0 bg-gradient-to-r from-cyan-400 via-purple-400 to-green-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <span className="relative z-10 flex items-center justify-center space-x-2">
               <span>See Skills in Action</span>
               <svg

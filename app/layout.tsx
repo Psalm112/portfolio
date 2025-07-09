@@ -6,8 +6,6 @@ import {
   Space_Grotesk,
   Orbitron,
 } from "next/font/google";
-// import ScrollProgress from "./components/ui/ScrollProgress";
-// import PerformanceMonitor from "./components/ui/PerformanceMonitor";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -76,6 +74,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   colorScheme: "dark",
+  themeColor: "#0f172a",
 };
 
 export default function RootLayout({
@@ -97,84 +96,67 @@ export default function RootLayout({
           crossOrigin=""
         />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <meta name="theme-color" content="#0f172a" />
+        <meta name="msapplication-navbutton-color" content="#0f172a" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Prevent white flashes and optimize initial load
               (function() {
-                document.documentElement.style.backgroundColor = '#0f172a';
-                document.documentElement.style.backgroundImage = 'linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%)';
-                document.documentElement.style.backgroundAttachment = 'fixed';
-                
-                // Optimize smooth scroll with better performance
-                if ('scrollBehavior' in document.documentElement.style) {
-                  document.documentElement.style.scrollBehavior = 'smooth';
-                } else {
-                  import('smoothscroll-polyfill').then((smoothscroll) => {
-                    smoothscroll.polyfill();
-                  }).catch(() => {
-                    // Fallback for smooth scroll
-                    const originalScrollTo = window.scrollTo;
-                    window.scrollTo = function(options) {
-                      if (options && options.behavior === 'smooth') {
-                        const target = options.top || 0;
-                        const start = window.pageYOffset;
-                        const distance = target - start;
-                        const duration = 800;
-                        let startTime = null;
-                        
-                        function animation(currentTime) {
-                          if (startTime === null) startTime = currentTime;
-                          const timeElapsed = currentTime - startTime;
-                          const run = ease(timeElapsed, start, distance, duration);
-                          window.scrollTo(0, run);
-                          if (timeElapsed < duration) requestAnimationFrame(animation);
-                        }
-                        
-                        function ease(t, b, c, d) {
-                          t /= d / 2;
-                          if (t < 1) return c / 2 * t * t + b;
-                          t--;
-                          return -c / 2 * (t * (t - 2) - 1) + b;
-                        }
-                        
-                        requestAnimationFrame(animation);
-                      } else {
-                        originalScrollTo.call(this, options);
-                      }
-                    };
-                  });
-                }
-                
-                // Optimized WebGL context management
-                let webglContextLost = false;
-                let contextLossCount = 0;
-                let lastContextLoss = 0;
-                
-                window.addEventListener('webglcontextlost', function(event) {
-                  event.preventDefault();
-                  webglContextLost = true;
-                  contextLossCount++;
-                  lastContextLoss = Date.now();
-                  
-                  if (contextLossCount > 3) {
-                    console.warn('Multiple WebGL context losses detected. Consider reducing graphics quality.');
+                // Prevent FOUC and optimize initial render
+                const style = document.createElement('style');
+                style.textContent = \`
+                  html, body {
+                    background-color: #0f172a !important;
+                    background-image: linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%) !important;
+                    background-attachment: fixed !important;
+                    margin: 0;
+                    padding: 0;
+                    min-height: 100vh;
+                    overflow-x: hidden;
                   }
                   
-                  setTimeout(() => {
-                    webglContextLost = false;
-                  }, 2000);
+                  /* Preload critical styles */
+                  .performance-optimized {
+                    contain: layout style paint;
+                    transform: translateZ(0);
+                    backface-visibility: hidden;
+                    will-change: transform;
+                  }
+                  
+                  /* Smooth scroll optimization */
+                  html {
+                    scroll-behavior: smooth;
+                  }
+                  
+                  @media (prefers-reduced-motion: reduce) {
+                    html {
+                      scroll-behavior: auto;
+                    }
+                  }
+                \`;
+                document.head.appendChild(style);
+                
+                // Optimize WebGL performance
+                let webglContextLost = false;
+                window.addEventListener('webglcontextlost', function(e) {
+                  e.preventDefault();
+                  webglContextLost = true;
+                  setTimeout(() => { webglContextLost = false; }, 2000);
                 }, { passive: false });
                 
                 // Performance monitoring
                 if ('performance' in window) {
                   window.addEventListener('load', function() {
-                    setTimeout(() => {
+                    requestIdleCallback(() => {
                       const perfData = performance.getEntriesByType('navigation')[0];
-                      if (perfData && perfData.loadEventEnd - perfData.loadEventStart > 3000) {
-                        console.warn('Page load time is slow. Consider optimizing assets.');
+                      if (perfData?.loadEventEnd - perfData?.loadEventStart > 3000) {
+                        console.warn('Consider optimizing for better performance');
                       }
-                    }, 100);
+                    });
                   });
                 }
               })();
@@ -183,8 +165,6 @@ export default function RootLayout({
         />
       </head>
       <body className="relative font-sans antialiased overflow-x-hidden min-h-screen performance-optimized">
-        {/* <ScrollProgress /> */}
-        {/* <PerformanceMonitor /> */}
         <div className="relative z-10 min-h-screen">{children}</div>
       </body>
     </html>

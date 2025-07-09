@@ -9,13 +9,15 @@
   
   html {
     scroll-behavior: smooth;
-    /* Optimize for performance */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     will-change: scroll-position;
-    /* Prevent white flashes */
     background-color: #0f172a;
     min-height: 100vh;
+    /* Better font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   
   body {
@@ -24,40 +26,46 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;
     min-height: 100vh;
-    /* Optimize scroll performance */
     overflow-x: hidden;
-    /* Force GPU acceleration */
+    /* Performance optimizations */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     backface-visibility: hidden;
     perspective: 1000px;
-    /* Reduce paint operations */
     contain: layout style paint;
+    /* Prevent unwanted scrolling when mobile menu is open */
+    position: relative;
   }
 
-  /* Optimize scroll performance */
-  * {
-    scroll-behavior: smooth;
-  }
-  
-  /* Hide scrollbars for cleaner look */
+  /* Better scrollbar styling */
   ::-webkit-scrollbar {
-    display: none;
-    width: 0 !important;
-    height: 0 !important;
-    background: transparent !important;
+    width: 8px;
+    height: 8px;
   }
   
-  html, body {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+  ::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.1);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #0891b2, #2563eb);
+  }
+  
+  /* Firefox scrollbar */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: #06b6d4 rgba(15, 23, 42, 0.1);
   }
 }
 
 @layer components {
   .performance-optimized {
     contain: layout style paint;
-    /* Force GPU acceleration */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     backface-visibility: hidden;
@@ -68,23 +76,19 @@
     scroll-behavior: smooth;
   }
   
-  /* Optimized section base styles */
   .section-base {
     position: relative;
     background: linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%);
     background-attachment: fixed;
     min-height: 100vh;
     width: 100%;
-    /* Optimize rendering */
     contain: layout style paint;
-    /* Force GPU acceleration */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     backface-visibility: hidden;
     will-change: transform;
   }
   
-  /* Optimized canvas container */
   .canvas-container {
     position: relative;
     width: 100%;
@@ -95,13 +99,24 @@
     backface-visibility: hidden;
   }
   
-  /* Optimized animation container */
   .animation-container {
     contain: layout style paint;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     backface-visibility: hidden;
     will-change: transform, opacity;
+  }
+  
+  /* Mobile menu overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 40;
   }
 }
 
@@ -123,79 +138,173 @@
     will-change: transform;
   }
   
-  /* Optimized scroll utilities */
   .scroll-optimized {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
   }
   
-  /* Reduce motion for accessibility */
-  .reduce-motion {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .transform-gpu {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
   }
 }
 
-/* Optimized keyframe animations */
+/* Optimized animations */
 @keyframes fadeIn {
-  from { 
-    opacity: 0; 
-    transform: translateZ(0);
-  }
-  to { 
-    opacity: 1; 
-    transform: translateZ(0);
-  }
+ from { 
+   opacity: 0; 
+   transform: translateZ(0);
+ }
+ to { 
+   opacity: 1; 
+   transform: translateZ(0);
+ }
 }
 
 @keyframes slideUp {
-  from { 
-    opacity: 0; 
-    transform: translateY(50px) translateZ(0);
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0) translateZ(0);
-  }
+ from { 
+   opacity: 0; 
+   transform: translateY(50px) translateZ(0);
+ }
+ to { 
+   opacity: 1; 
+   transform: translateY(0) translateZ(0);
+ }
 }
 
-/* Optimized loading animation */
+@keyframes slideInRight {
+ from {
+   opacity: 0;
+   transform: translateX(100%) translateZ(0);
+ }
+ to {
+   opacity: 1;
+   transform: translateX(0) translateZ(0);
+ }
+}
+
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+ 0% {
+   background-position: -200% 0;
+ }
+ 100% {
+   background-position: 200% 0;
+ }
+}
+
+@keyframes pulse {
+ 0%, 100% {
+   opacity: 1;
+ }
+ 50% {
+   opacity: 0.5;
+ }
+}
+
+/* Enhanced mobile navigation animations */
+@keyframes mobileMenuSlide {
+ from {
+   transform: translateX(100%) translateZ(0);
+   opacity: 0;
+ }
+ to {
+   transform: translateX(0) translateZ(0);
+   opacity: 1;
+ }
+}
+
+/* Scroll progress bar animations */
+@keyframes progressGlow {
+ 0% {
+   box-shadow: 0 0 5px rgba(6, 182, 212, 0.3);
+ }
+ 50% {
+   box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+ }
+ 100% {
+   box-shadow: 0 0 5px rgba(6, 182, 212, 0.3);
+ }
 }
 
 /* Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+ *,
+ *::before,
+ *::after {
+   animation-duration: 0.01ms !important;
+   animation-iteration-count: 1 !important;
+   transition-duration: 0.01ms !important;
+   scroll-behavior: auto !important;
+ }
+ 
+ html {
+   scroll-behavior: auto !important;
+ }
 }
 
-/* Optimized background utilities */
-.force-bg {
-  background-color: #0f172a !important;
-  background-image: linear-gradient(135deg, #1e293b 0%, #000000 50%, #1e293b 100%) !important;
-  background-attachment: fixed !important;
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+ .bg-gray-900\/80 {
+   background-color: rgba(0, 0, 0, 0.95) !important;
+ }
+ 
+ .border-gray-700\/50 {
+   border-color: rgba(255, 255, 255, 0.3) !important;
+ }
 }
 
-/* Optimized scroll performance for mobile */
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+ html {
+   color-scheme: dark;
+ }
+}
+
+/* Mobile optimizations */
 @media (max-width: 768px) {
-  html {
-    scroll-behavior: auto;
-  }
-  
-  .performance-optimized {
-    contain: layout style;
-  }
+ html {
+   scroll-behavior: auto;
+ }
+ 
+ .performance-optimized {
+   contain: layout style;
+ }
+ 
+ /* Prevent zoom on focus */
+ input, select, textarea {
+   font-size: 16px !important;
+ }
+ 
+ /* Optimize mobile scroll */
+ body {
+   -webkit-overflow-scrolling: touch;
+ }
+}
+
+/* Tablet optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+ .section-base {
+   background-attachment: scroll;
+ }
+}
+
+/* High DPI screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+ .text-shadow {
+   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+ }
+}
+
+/* Print styles */
+@media print {
+ * {
+   background: white !important;
+   color: black !important;
+ }
+ 
+ .fixed, .sticky {
+   position: static !important;
+ }
 }
